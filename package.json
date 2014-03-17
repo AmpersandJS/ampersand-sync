@@ -12,7 +12,10 @@
   },
   "homepage": "https://github.com/ampersandjs/ampersand-sync",
   "keywords": [
-    "backbone, sync, rest, ampersand"
+    "backbone",
+    "sync",
+    "rest",
+    "ampersand"
   ],
   "license": "MIT",
   "main": "ampersand-sync.js",
