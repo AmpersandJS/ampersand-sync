@@ -1,15 +1,26 @@
 {
   "name": "ampersand-sync",
-  "version": "0.1.0",
   "description": "Standalone, modern-browser-only version of Backbone.Sync as Common JS module.",
+  "version": "0.1.0",
+  "author": "Henrik Joreteg <henrik@andyet.net>",
+  "bugs": {
+    "url": "https://github.com/ampersandjs/ampersand-sync/issues"
+  },
+  "dependencies": {
+    "jquery-browserify": "~1.8.1",
+    "underscore": "~1.6.0"
+  },
+  "homepage": "https://github.com/ampersandjs/ampersand-sync",
+  "keywords": [
+    "backbone, sync, rest, ampersand"
+  ],
+  "license": "MIT",
   "main": "ampersand-sync.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ampersandjs/ampersand-sync.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Henrik Joreteg <henrik@andyet.net>",
-  "license": "MIT",
-  "dependencies": {
-    "underscore": "~1.6.0",
-    "jquery-browserify": "~1.8.1"
   }
 }
