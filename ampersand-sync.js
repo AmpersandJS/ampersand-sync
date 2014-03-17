@@ -2,6 +2,12 @@ var _ = require('underscore');
 var $ = require('jquery-browserify');
 
 
+// Throw an error when a URL is needed, and none is supplied.
+var urlError = function() {
+    throw new Error('A "url" property or function must be specified');
+};
+
+
 module.exports = function(method, model, options) {
     var type = methodMap[method];
 
