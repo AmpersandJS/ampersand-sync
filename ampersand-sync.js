@@ -3,12 +3,12 @@ var $ = require('jquery-browserify');
 
 
 // Throw an error when a URL is needed, and none is supplied.
-var urlError = function() {
+var urlError = function () {
     throw new Error('A "url" property or function must be specified');
 };
 
 
-module.exports = function(method, model, options) {
+module.exports = function (method, model, options) {
     var type = methodMap[method];
 
     // Default options, unless specified.
@@ -43,7 +43,7 @@ module.exports = function(method, model, options) {
         params.type = 'POST';
         if (options.emulateJSON) params.data._method = type;
         var beforeSend = options.beforeSend;
-        options.beforeSend = function(xhr) {
+        options.beforeSend = function (xhr) {
             xhr.setRequestHeader('X-HTTP-Method-Override', type);
             if (beforeSend) return beforeSend.apply(this, arguments);
         };
@@ -52,6 +52,14 @@ module.exports = function(method, model, options) {
     // Don't process data on a non-GET request.
     if (params.type !== 'GET' && !options.emulateJSON) {
         params.processData = false;
+    }
+
+    // Allow the model a chance to modify Ajax options.
+    // Useful for CORS headers, etc.
+    if (_.isFunction(model.ajaxConfig)) {
+        params = model.ajaxConfig.call(model, params);
+    } else if (_.isObject(model.ajaxConfig)) {
+        _.extend(params, model.ajaxConfig);
     }
 
     // Make the request, allowing the user to override any Ajax options.
