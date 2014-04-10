@@ -62,9 +62,11 @@ module.exports = function (method, model, options) {
         _.extend(params, model.ajaxConfig);
     }
 
+    var ajaxSettings = _.extend(params, options);
+
     // Make the request, allowing the user to override any Ajax options.
-    var xhr = options.xhr = $.ajax(_.extend(params, options));
-    model.trigger('request', model, xhr, options);
+    var xhr = options.xhr = $.ajax(ajaxSettings);
+    model.trigger('request', model, xhr, options, ajaxSettings);
     return xhr;
 };
 
