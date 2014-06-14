@@ -1,5 +1,5 @@
 var _ = require('underscore');
-var $ = require('jquery-browserify');
+var $ = require('jquery');
 
 
 // Throw an error when a URL is needed, and none is supplied.

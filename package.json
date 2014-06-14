@@ -7,7 +7,7 @@
     "url": "https://github.com/ampersandjs/ampersand-sync/issues"
   },
   "dependencies": {
-    "jquery-browserify": "~1.8.1",
+    "jquery": "^2.1.1",
     "underscore": "~1.6.0"
   },
   "devDependencies": {
