@@ -1,5 +1,6 @@
 var _ = require('underscore');
-var $ = require('jquery');
+var xhr = require('xhr');
+var qs = require('qs');
 
 
 // Throw an error when a URL is needed, and none is supplied.
@@ -10,6 +11,7 @@ var urlError = function () {
 
 module.exports = function (method, model, options) {
     var type = methodMap[method];
+    var headers = {};
 
     // Default options, unless specified.
     _.defaults(options || (options = {}), {
@@ -17,8 +19,8 @@ module.exports = function (method, model, options) {
         emulateJSON: false
     });
 
-    // Default JSON-request options.
-    var params = {type: type, dataType: 'json'};
+    // Default request options.
+    var params = {type: type};
 
     // Ensure that we have a URL.
     if (!options.url) {
@@ -27,47 +29,71 @@ module.exports = function (method, model, options) {
 
     // Ensure that we have the appropriate request data.
     if (options.data == null && model && (method === 'create' || method === 'update' || method === 'patch')) {
-        params.contentType = 'application/json';
-        params.data = JSON.stringify(options.attrs || model.toJSON(options));
+        params.json = options.attrs || model.toJSON(options);
     }
 
     // For older servers, emulate JSON by encoding the request into an HTML-form.
     if (options.emulateJSON) {
-        params.contentType = 'application/x-www-form-urlencoded';
-        params.data = params.data ? {model: params.data} : {};
+        headers['Content-Type'] = 'application/x-www-form-urlencoded';
+        params.body = params.json ? {model: params.json} : {};
+        if (params.json) delete params.json;
     }
 
     // For older servers, emulate HTTP by mimicking the HTTP method with `_method`
     // And an `X-HTTP-Method-Override` header.
     if (options.emulateHTTP && (type === 'PUT' || type === 'DELETE' || type === 'PATCH')) {
         params.type = 'POST';
-        if (options.emulateJSON) params.data._method = type;
-        var beforeSend = options.beforeSend;
-        options.beforeSend = function (xhr) {
-            xhr.setRequestHeader('X-HTTP-Method-Override', type);
+        if (options.emulateJSON) params.body._method = type;
+        headers['X-HTTP-Method-Override'] = type;
+    }
+
+    // When emulating JSON, we turn the body into a querystring.
+    // We do this later to let the emulateHTTP run its course.
+    if (options.emulateJSON) {
+        params.body = qs.stringify(params.body);
+    }
+
+    // Start setting ajaxConfig options (headers, xhrFields).
+    var ajaxConfig = (_.result(model, 'ajaxConfig') || {});
+
+    // Combine generated headers with user's headers.
+    if (ajaxConfig.headers) {
+        _.extend(headers, ajaxConfig.headers);
+    }
+    params.headers = headers;
+
+    // Set raw xhr options.
+    if (ajaxConfig.xhrFields) {
+        var beforeSend = ajaxConfig.beforeSend;
+        params.beforeSend = function (req) {
+            for (var key in ajaxConfig.xhrFields) {
+                req[key] = ajaxConfig.xhrFields[key];
+            }
             if (beforeSend) return beforeSend.apply(this, arguments);
         };
+        params.xhrFields = ajaxConfig.xhrFields;
     }
 
-    // Don't process data on a non-GET request.
-    if (params.type !== 'GET' && !options.emulateJSON) {
-        params.processData = false;
-    }
-
-    // Allow the model a chance to modify Ajax options.
-    // Useful for CORS headers, etc.
-    if (_.isFunction(model.ajaxConfig)) {
-        params = model.ajaxConfig.call(model, params);
-    } else if (_.isObject(model.ajaxConfig)) {
-        _.extend(params, model.ajaxConfig);
-    }
+    // Turn a jQuery.ajax formatted request into xhr compatible
+    params.method = params.type;
 
     var ajaxSettings = _.extend(params, options);
 
-    // Make the request, allowing the user to override any Ajax options.
-    var xhr = options.xhr = $.ajax(ajaxSettings);
-    model.trigger('request', model, xhr, options, ajaxSettings);
-    return xhr;
+    // Make the request. The callback executes functions that are compatible
+    // With jQuery.ajax's syntax.
+    var _xhr = options.xhr = xhr(ajaxSettings, function (err, resp, body) {
+        if (err && options.error) return options.error(resp, 'error', err.message);
+
+        // Parse body as JSON if a string.
+        if (body && typeof body === 'string') {
+            try {
+                body = JSON.parse(body);
+            } catch (e) {}
+        }
+        if (body && options.success) return options.success(body, 'success', resp);
+    });
+    model.trigger('request', model, _xhr, options, ajaxSettings);
+    return _xhr;
 };
 
 // Map from CRUD to HTTP for our default `Backbone.sync` implementation.

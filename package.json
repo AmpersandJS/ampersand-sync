@@ -7,8 +7,9 @@
     "url": "https://github.com/ampersandjs/ampersand-sync/issues"
   },
   "dependencies": {
-    "jquery": "^2.1.1",
-    "underscore": "~1.6.0"
+    "qs": "^0.6.6",
+    "underscore": "~1.6.0",
+    "xhr": "^1.10.0"
   },
   "devDependencies": {
     "jshint": "~2.5.0",
