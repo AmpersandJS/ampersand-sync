@@ -32,6 +32,11 @@ module.exports = function (method, model, options) {
         params.json = options.attrs || model.toJSON(options);
     }
 
+    // If passed a data param, we add it to the body as JSON.
+    if (options.data !== null) {
+        params.json = options.data;
+    }
+
     // For older servers, emulate JSON by encoding the request into an HTML-form.
     if (options.emulateJSON) {
         headers['Content-Type'] = 'application/x-www-form-urlencoded';
