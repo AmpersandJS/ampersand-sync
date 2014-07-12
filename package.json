@@ -7,8 +7,10 @@
     "url": "https://github.com/ampersandjs/ampersand-sync/issues"
   },
   "dependencies": {
-    "jquery": "^2.1.1",
-    "underscore": "~1.6.0"
+    "qs": "^0.6.6",
+    "tap-spec": "^0.2.0",
+    "underscore": "~1.6.0",
+    "xhr": "^1.10.0"
   },
   "devDependencies": {
     "jshint": "~2.5.0",
@@ -34,7 +36,7 @@
   },
   "scripts": {
     "start": "run-browser test/*",
-    "test": "browserify test/* | tape-run"
+    "test": "browserify test/* | tape-run | tap-spec"
   },
   "testling": {
     "files": "test/*.js",

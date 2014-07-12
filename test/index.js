@@ -39,8 +39,8 @@ test('read', function (t) {
     var xhr = sync('read', getStub());
     t.equal(xhr.ajaxSettings.url, '/library');
     t.equal(xhr.ajaxSettings.type, 'GET');
-    t.equal(xhr.ajaxSettings.dataType, 'json');
-    t.notOk(xhr.ajaxSettings.data);
+    t.ok(!xhr.ajaxSettings.json);
+    t.ok(!xhr.ajaxSettings.data);
     t.end();
 });
 
@@ -60,8 +60,8 @@ test('create', function (t) {
     }));
     t.equal(xhr.ajaxSettings.url, '/library');
     t.equal(xhr.ajaxSettings.type, 'POST');
-    t.equal(xhr.ajaxSettings.dataType, 'json');
-    var data = JSON.parse(xhr.ajaxSettings.data);
+    t.equal(xhr.ajaxSettings.headers['Content-Type'], 'application/json');
+    var data = xhr.ajaxSettings.json;
     t.equal(data.title, 'The Tempest');
     t.equal(data.author, 'Bill Shakespeare');
     t.equal(data.length, 123);
@@ -75,8 +75,8 @@ test('update', function (t) {
     }));
     t.equal(xhr.ajaxSettings.url, '/library');
     t.equal(xhr.ajaxSettings.type, 'PUT');
-    t.equal(xhr.ajaxSettings.dataType, 'json');
-    var data = JSON.parse(xhr.ajaxSettings.data);
+    t.equal(xhr.ajaxSettings.headers['Content-Type'], 'application/json');
+    var data = xhr.ajaxSettings.json;
     t.equal(data.id, '1-the-tempest');
     t.equal(data.author, 'William Shakespeare');
     t.end();
@@ -95,12 +95,8 @@ test('update with emulateHTTP and emulateJSON', function (t) {
     );
     t.equal(xhr.ajaxSettings.url, '/library');
     t.equal(xhr.ajaxSettings.type, 'POST');
-    t.equal(xhr.ajaxSettings.dataType, 'json');
-    t.equal(xhr.ajaxSettings.data._method, 'PUT');
-    var data = JSON.parse(xhr.ajaxSettings.data.model);
-    t.equal(data.id, '2-the-tempest');
-    t.equal(data.author, 'Tim Shakespeare');
-    t.equal(data.length, 123);
+    t.equal(xhr.ajaxSettings.body, 'model[id]=2-the-tempest&model[author]=Tim%20Shakespeare&model[length]=123&_method=PUT');
+    t.equal(xhr.ajaxSettings.headers['Content-Type'], 'application/x-www-form-urlencoded');
     t.end();
 });
 
@@ -116,8 +112,8 @@ test('update with just emulateHTTP', function (t) {
     );
     t.equal(xhr.ajaxSettings.url, '/library');
     t.equal(xhr.ajaxSettings.type, 'POST');
-    t.equal(xhr.ajaxSettings.contentType, 'application/json');
-    var data = JSON.parse(xhr.ajaxSettings.data);
+    t.equal(xhr.ajaxSettings.headers['Content-Type'], 'application/json');
+    var data = xhr.ajaxSettings.json;
     t.equal(data.id, '2-the-tempest');
     t.equal(data.author, 'Tim Shakespeare');
     t.equal(data.length, 123);
@@ -137,11 +133,8 @@ test("update with just emulateJSON", function (t) {
     );
     t.equal(xhr.ajaxSettings.url, '/library');
     t.equal(xhr.ajaxSettings.type, 'PUT');
-    t.equal(xhr.ajaxSettings.contentType, 'application/x-www-form-urlencoded');
-    var data = JSON.parse(xhr.ajaxSettings.data.model);
-    t.equal(data.id, '2-the-tempest');
-    t.equal(data.author, 'Tim Shakespeare');
-    t.equal(data.length, 123);
+    t.equal(xhr.ajaxSettings.headers['Content-Type'], 'application/x-www-form-urlencoded');
+    t.equal(xhr.ajaxSettings.body, 'model[id]=2-the-tempest&model[author]=Tim%20Shakespeare&model[length]=123');
     t.end();
 });
 
@@ -169,7 +162,7 @@ test('destroy with emulateHTTP', function (t) {
     );
     t.equal(xhr.ajaxSettings.url, '/library');
     t.equal(xhr.ajaxSettings.type, 'POST');
-    t.equal(JSON.stringify(xhr.ajaxSettings.data), '{"_method":"DELETE"}');
+    t.equal(xhr.ajaxSettings.body, '_method=DELETE');
     t.end();
 });
 
