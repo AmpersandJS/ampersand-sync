@@ -1,7 +1,7 @@
 {
   "name": "ampersand-sync",
   "description": "Standalone, modern-browser-only version of Backbone.Sync as Common JS module.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "Henrik Joreteg <henrik@andyet.net>",
   "bugs": {
     "url": "https://github.com/ampersandjs/ampersand-sync/issues"
