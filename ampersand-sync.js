@@ -32,9 +32,11 @@ module.exports = function (method, model, options) {
         params.json = options.attrs || model.toJSON(options);
     }
 
-    // If passed a data param, we add it to the body as JSON.
-    if (options.data !== null) {
-        params.json = options.data;
+    // If passed a data param, we add it to the URL or body depending on request type
+    if (options.data && type === 'GET') {
+        // make sure we've got a '?'
+        params.url += _.contains(params.url, '?') ? '&' : '?';
+        params.url += qs.stringify(options.data);
     }
 
     // For older servers, emulate JSON by encoding the request into an HTML-form.

@@ -45,10 +45,13 @@ test('read', function (t) {
 });
 
 test('passing data', function (t) {
+    // on reads it should be part of the URL
     var xhr = sync('read', getStub(), {data: {a: 'a', one: 1}});
-    t.equal(xhr.ajaxSettings.url, '/library');
-    t.equal(xhr.ajaxSettings.data.a, 'a');
-    t.equal(xhr.ajaxSettings.data.one, 1);
+    t.equal(xhr.ajaxSettings.url, '/library?a=a&one=1', 'data passed to reads should be made into a query string');
+    var otherStub = getStub();
+    otherStub.url = '/library?something=hi';
+    var xhr2 = sync('read', otherStub, {data: {a: 'a', one: 1}});
+    t.equal(xhr2.ajaxSettings.url, '/library?something=hi&a=a&one=1', 'data passed to reads should be made into a query string');
     t.end();
 });
 
