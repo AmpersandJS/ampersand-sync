@@ -17,10 +17,11 @@ function getStub(data) {
 }
 
 test('should allow models to overwrite ajax configs at the model level', function (t) {
-    t.plan(2);
+    t.plan(3);
     var Me = Model.extend({
         url: '/hi',
         ajaxConfig: {
+            useXDR: true,
             xhrFields: {
                 withCredentials: true
             }
@@ -30,6 +31,7 @@ test('should allow models to overwrite ajax configs at the model level', functio
     m.on('request', function (model, xhr, options, ajaxSettings) {
         t.equal(ajaxSettings.type, 'GET');
         t.equal(ajaxSettings.xhrFields.withCredentials, true);
+        t.equal(ajaxSettings.useXDR, true);
         t.end();
     });
     var xhr = sync('read', m);

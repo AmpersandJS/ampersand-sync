@@ -69,6 +69,11 @@ module.exports = function (method, model, options) {
     }
     params.headers = headers;
 
+    //Set XDR for cross domain in IE8/9
+    if (ajaxConfig.useXDR) {
+        params.useXDR = true;
+    }
+
     // Set raw xhr options.
     if (ajaxConfig.xhrFields) {
         var beforeSend = ajaxConfig.beforeSend;
