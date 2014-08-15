@@ -102,7 +102,7 @@ module.exports = function (method, model, options) {
                 body = JSON.parse(body);
             } catch (e) {}
         }
-        if (body && options.success) return options.success(body, 'success', resp);
+        if (options.success) return options.success(body, 'success', resp);
     });
     model.trigger('request', model, request, options, ajaxSettings);
     request.ajaxSettings = ajaxSettings;
