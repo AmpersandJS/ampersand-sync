@@ -17,6 +17,7 @@
     "ampersand-rest-collection": "^2.0.1",
     "browserify": "^5.9.3",
     "jshint": "^2.5.3",
+    "phantomjs": "^1.9.7-15",
     "precommit-hook": "^1.0.7",
     "run-browser": "~1.3.0",
     "tape": "^2.14.0",
