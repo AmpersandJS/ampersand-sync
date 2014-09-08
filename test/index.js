@@ -2,7 +2,6 @@ var test = require('tape');
 var sync = require('../ampersand-sync');
 var Model = require('ampersand-model');
 
-
 function getStub(data) {
     return {
         url: '/library',
@@ -38,7 +37,7 @@ test('should allow models to overwrite ajax configs at the model level', functio
 });
 
 test('read', function (t) {
-    var xhr = sync('read', getStub());
+    var xhr = sync('read', getStub()).request;
     t.equal(xhr.ajaxSettings.url, '/library');
     t.equal(xhr.ajaxSettings.type, 'GET');
     t.ok(!xhr.ajaxSettings.json);
@@ -48,11 +47,11 @@ test('read', function (t) {
 
 test('passing data', function (t) {
     // on reads it should be part of the URL
-    var xhr = sync('read', getStub(), {data: {a: 'a', one: 1}});
+    var xhr = sync('read', getStub(), {data: {a: 'a', one: 1}}).request;
     t.equal(xhr.ajaxSettings.url, '/library?a=a&one=1', 'data passed to reads should be made into a query string');
     var otherStub = getStub();
     otherStub.url = '/library?something=hi';
-    var xhr2 = sync('read', otherStub, {data: {a: 'a', one: 1}});
+    var xhr2 = sync('read', otherStub, {data: {a: 'a', one: 1}}).request;
     t.equal(xhr2.ajaxSettings.url, '/library?something=hi&a=a&one=1', 'data passed to reads should be made into a query string');
     t.end();
 });
@@ -62,7 +61,7 @@ test('create', function (t) {
         title: 'The Tempest',
         author: 'Bill Shakespeare',
         length: 123
-    }));
+    })).request;
     t.equal(xhr.ajaxSettings.url, '/library');
     t.equal(xhr.ajaxSettings.type, 'POST');
     t.equal(xhr.ajaxSettings.headers['Content-Type'], 'application/json');
@@ -77,7 +76,7 @@ test('update', function (t) {
     var xhr = sync('update', getStub({
         id: '1-the-tempest',
         author: 'William Shakespeare'
-    }));
+    })).request;
     t.equal(xhr.ajaxSettings.url, '/library');
     t.equal(xhr.ajaxSettings.type, 'PUT');
     t.equal(xhr.ajaxSettings.headers['Content-Type'], 'application/json');
@@ -97,7 +96,7 @@ test('update with emulateHTTP and emulateJSON', function (t) {
             emulateHTTP: true,
             emulateJSON: true
         }
-    );
+    ).request;
     t.equal(xhr.ajaxSettings.url, '/library');
     t.equal(xhr.ajaxSettings.type, 'POST');
     t.equal(xhr.ajaxSettings.body, 'model%5Bid%5D=2-the-tempest&model%5Bauthor%5D=Tim%20Shakespeare&model%5Blength%5D=123&_method=PUT');
@@ -114,7 +113,7 @@ test('update with just emulateHTTP', function (t) {
         {
             emulateHTTP: true
         }
-    );
+    ).request;
     t.equal(xhr.ajaxSettings.url, '/library');
     t.equal(xhr.ajaxSettings.type, 'POST');
     t.equal(xhr.ajaxSettings.headers['Content-Type'], 'application/json');
@@ -135,7 +134,7 @@ test("update with just emulateJSON", function (t) {
         {
             emulateJSON: true
         }
-    );
+    ).request;
     t.equal(xhr.ajaxSettings.url, '/library');
     t.equal(xhr.ajaxSettings.type, 'PUT');
     t.equal(xhr.ajaxSettings.headers['Content-Type'], 'application/x-www-form-urlencoded');
@@ -147,7 +146,7 @@ test('delete', function (t) {
     var xhr = sync('delete', getStub({
         author: 'Tim Shakespeare',
         length: 123
-    }));
+    })).request;
     t.equal(xhr.ajaxSettings.url, '/library');
     t.equal(xhr.ajaxSettings.type, 'DELETE');
     t.notOk(xhr.ajaxSettings.data);
@@ -164,7 +163,7 @@ test('destroy with emulateHTTP', function (t) {
             emulateHTTP: true,
             emulateJSON: true
         }
-    );
+    ).request;
     t.equal(xhr.ajaxSettings.url, '/library');
     t.equal(xhr.ajaxSettings.type, 'POST');
     t.equal(xhr.ajaxSettings.body, '_method=DELETE');
@@ -173,7 +172,7 @@ test('destroy with emulateHTTP', function (t) {
 
 test('urlError', function (t) {
     t.throws(function () {
-        var xhr = sync('read', {});
+        var xhr = sync('read', {}).request;
     }, Error);
     t.end();
 });
@@ -185,7 +184,7 @@ test('Call provided error callback on error.', function (t) {
             t.pass();
             t.end();
         }
-    });
+    }).request;
     xhr.ajaxSettings.error();
 });
 
@@ -196,6 +195,6 @@ test('Call user provided beforeSend function.', function (t) {
             t.pass();
         },
         emulateHTTP: true
-    });
+    }).request;
     t.end();
 });
