@@ -1,3 +1,29 @@
+This is a forked from [ampersand-sync](https://github.com/AmpersandJS/ampersand-sync) to add the ability of using [promises](http://promisesaplus.com/).
+
+## Main difference
+In this version, the `sync` method returns a promise instead of the request object. The `request` object is still available on the promise.
+
+```js
+var syncPromise = require('ampersand-sync-promise');
+var AmpersandModel = require('ampersand-model');
+
+var Model = AmpersandModel.extend({
+	sync: syncPromise
+});
+
+var aModel = new Model();
+aModel.fetch().then(function (body) {
+	console.log(body);
+}, function (err) {
+	console.error(err);
+});
+
+// access the request object
+var bModel = new Model();
+var bRequest = bModel.fetch().request;
+console.log(bRequest.ajaxSettings);
+```
+
 # ampersand-sync
 
 Standalone, modern-browser-only version of Backbone.Sync as Common JS module.
@@ -37,7 +63,7 @@ npm install ampersand-sync
 npm test
 ```
 
-Tests are written in [tape](https://github.com/substack/tape) and since they require a browser environment it gets run in a headless browser using phantomjs via [tape-run](https://github.com/juliangruber/tape-run). Make sure you have phantomjs installed for this to work. 
+Tests are written in [tape](https://github.com/substack/tape) and since they require a browser environment it gets run in a headless browser using phantomjs via [tape-run](https://github.com/juliangruber/tape-run). Make sure you have phantomjs installed for this to work.
 
 You can also run `npm start` then open a browser.
 
