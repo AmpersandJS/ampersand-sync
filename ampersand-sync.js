@@ -1,7 +1,9 @@
 var _ = require('underscore');
 var xhr = require('xhr');
 var qs = require('qs');
-
+// TPromise stands for then/promise, used as a way to avoid naming collision with native Promise implementation
+// at this point, this is largely to avoid jshint from complaining
+var TPromise = require('promise');
 
 // Throw an error when a URL is needed, and none is supplied.
 var urlError = function () {
@@ -91,22 +93,35 @@ module.exports = function (method, model, options) {
 
     var ajaxSettings = _.extend(params, options);
 
+    var request;
     // Make the request. The callback executes functions that are compatible
     // With jQuery.ajax's syntax.
-    var request = options.xhr = xhr(ajaxSettings, function (err, resp, body) {
-        if (err && options.error) return options.error(resp, 'error', err.message);
+    var promise = new TPromise(function (resolve, reject) {
+        request = xhr(ajaxSettings, function (err, resp, body) {
+            if (err) {
+                if (options.error) {
+                    options.error(resp, 'error', err.message);
+                }
+                reject(err);
+            }
 
-        // Parse body as JSON if a string.
-        if (body && typeof body === 'string') {
-            try {
-                body = JSON.parse(body);
-            } catch (e) {}
-        }
-        if (options.success) return options.success(body, 'success', resp);
+            // Parse body as JSON if a string.
+            if (body && typeof body === 'string') {
+                try {
+                    body = JSON.parse(body);
+                } catch (e) {
+                    reject(e);
+                }
+            }
+            if (options.success) options.success(body, 'success', resp);
+            resolve(body);
+        });
     });
-    model.trigger('request', model, request, options, ajaxSettings);
     request.ajaxSettings = ajaxSettings;
-    return request;
+    model.trigger('request', model, request, options, ajaxSettings);
+    // attach request to promise
+    promise.request = request;
+    return promise;
 };
 
 // Map from CRUD to HTTP for our default `Backbone.sync` implementation.
