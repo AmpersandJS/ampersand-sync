@@ -1,13 +1,13 @@
 {
-  "name": "ampersand-sync-promise",
+  "name": "ampersand-sync-with-promise",
   "description": "Standalone, modern-browser-only version of Backbone.Sync as Common JS module. With a flavor of promise.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "contributors": [
     "Tri Nguyen <tri@tridnguyen.com>",
     "Henrik Joreteg <henrik@andyet.net>"
   ],
   "bugs": {
-    "url": "https://github.com/ampersandjs/ampersand-sync/issues"
+    "url": "https://github.com/tnguyen14/ampersand-sync-with-promise/issues"
   },
   "dependencies": {
     "promise": "^5.0.0",
@@ -27,7 +27,7 @@
     "tape": "^2.14.0",
     "tape-run": "^0.3.0"
   },
-  "homepage": "https://github.com/tnguyen14/ampersand-sync-promise",
+  "homepage": "https://github.com/tnguyen14/ampersand-sync-with-promise",
   "keywords": [
     "backbone",
     "sync",
@@ -38,7 +38,7 @@
   "main": "ampersand-sync.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tnguyen14/ampersand-sync-promise.git"
+    "url": "https://github.com/tnguyen14/ampersand-sync-with-promise.git"
   },
   "scripts": {
     "start": "run-browser test/*",
