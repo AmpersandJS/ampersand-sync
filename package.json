@@ -1,7 +1,7 @@
 {
   "name": "ampersand-sync-promise",
   "description": "Standalone, modern-browser-only version of Backbone.Sync as Common JS module. With a flavor of promise.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "contributors": [
     "Tri Nguyen <tri@tridnguyen.com>",
     "Henrik Joreteg <henrik@andyet.net>"
