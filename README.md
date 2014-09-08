@@ -5,7 +5,7 @@ A [bare bones Promises/A+ implementation](https://github.com/then/promise) is us
 In this version, the `sync` method returns a promise instead of the request object. The `request` object is still available on the promise.
 
 ```js
-var syncPromise = require('ampersand-sync-promise');
+var syncPromise = require('ampersand-sync-with-promise');
 var AmpersandModel = require('ampersand-model');
 
 var Model = AmpersandModel.extend({
