@@ -7,7 +7,7 @@
     "url": "https://github.com/ampersandjs/ampersand-sync/issues"
   },
   "dependencies": {
-    "qs": "^1.2.1",
+    "qs": "^2.2.4",
     "underscore": "~1.6.0",
     "xhr": "^1.10.0"
   },
