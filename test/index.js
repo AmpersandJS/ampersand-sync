@@ -126,7 +126,7 @@ test('update with just emulateHTTP', function (t) {
 });
 
 
-test("update with just emulateJSON", function (t) {
+test('update with just emulateJSON', function (t) {
     var xhr = sync('update', getStub({
             id: '2-the-tempest',
             author: 'Tim Shakespeare',

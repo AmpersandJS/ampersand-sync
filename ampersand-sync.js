@@ -100,7 +100,9 @@ module.exports = function (method, model, options) {
         if (body && typeof body === 'string') {
             try {
                 body = JSON.parse(body);
-            } catch (e) {}
+            } catch (e) {
+                if (options.error) return options.error(resp, 'error', e.message);
+            }
         }
         if (options.success) return options.success(body, 'success', resp);
     });
