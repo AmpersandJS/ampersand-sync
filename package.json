@@ -1,6 +1,6 @@
 {
   "name": "ampersand-sync",
-  "description": "Standalone, modern-browser-only version of Backbone.Sync as Common JS module.",
+  "description": "Provides sync behavior for updating data from ampersand models and collections to the server.",
   "version": "2.0.4",
   "author": "Henrik Joreteg <henrik@andyet.net>",
   "bugs": {
