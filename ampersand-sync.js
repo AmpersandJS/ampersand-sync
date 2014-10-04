@@ -16,7 +16,9 @@ module.exports = function (method, model, options) {
     // Default options, unless specified.
     _.defaults(options || (options = {}), {
         emulateHTTP: false,
-        emulateJSON: false
+        emulateJSON: false,
+        // overrideable primarily to enable testing
+        xhrImplementation: xhr
     });
 
     // Default request options.
@@ -93,14 +95,16 @@ module.exports = function (method, model, options) {
 
     // Make the request. The callback executes functions that are compatible
     // With jQuery.ajax's syntax.
-    var request = options.xhr = xhr(ajaxSettings, function (err, resp, body) {
+    var request = options.xhr = options.xhrImplementation(ajaxSettings, function (err, resp, body) {
         if (err && options.error) return options.error(resp, 'error', err.message);
 
         // Parse body as JSON if a string.
         if (body && typeof body === 'string') {
             try {
                 body = JSON.parse(body);
-            } catch (e) {}
+            } catch (err) {
+                if (options.error) return options.error(resp, 'error', err.message);
+            }
         }
         if (options.success) return options.success(body, 'success', resp);
     });

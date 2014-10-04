@@ -126,7 +126,7 @@ test('update with just emulateHTTP', function (t) {
 });
 
 
-test("update with just emulateJSON", function (t) {
+test('update with just emulateJSON', function (t) {
     var xhr = sync('update', getStub({
             id: '2-the-tempest',
             author: 'Tim Shakespeare',
@@ -187,6 +187,23 @@ test('Call provided error callback on error.', function (t) {
         }
     });
     xhr.ajaxSettings.error();
+});
+
+test('Call provided error callback is bad JSON error.', function (t) {
+    t.plan(3);
+
+    var xhr = sync('read', getStub(), {
+        error: function (resp, type, error) {
+            t.deepEqual(resp, {}, 'should be passed through response');
+            t.equal(type, 'error', 'is string \'error\' as per jquery');
+            t.equal(error, 'Unable to parse JSON string', 'should be json parse message');
+            t.end();
+        },
+        xhrImplementation: function (ajaxSettings, callback) {
+            callback(null, {}, '{"bad": "json');
+            return {};
+        }
+    });
 });
 
 test('Call user provided beforeSend function.', function (t) {
