@@ -1,4 +1,9 @@
-var _ = require('underscore');
+var _ = {
+    contains: require('lodash.contains'),
+    extend: require('lodash.assign'),
+    defaults: require('lodash.defaults'),
+    result: require('lodash.result')
+};
 var xhr = require('xhr');
 var qs = require('qs');
 

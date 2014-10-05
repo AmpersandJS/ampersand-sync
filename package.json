@@ -7,8 +7,11 @@
     "url": "https://github.com/ampersandjs/ampersand-sync/issues"
   },
   "dependencies": {
+    "lodash.assign": "^2.4.1",
+    "lodash.contains": "^2.4.1",
+    "lodash.defaults": "^2.4.1",
+    "lodash.result": "^2.4.1",
     "qs": "^2.2.4",
-    "underscore": "~1.6.0",
     "xhr": "^1.10.0"
   },
   "devDependencies": {
