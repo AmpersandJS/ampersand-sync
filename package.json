@@ -3,10 +3,16 @@
   "description": "Provides sync behavior for updating data from ampersand models and collections to the server.",
   "version": "3.0.0",
   "author": "Henrik Joreteg <henrik@andyet.net>",
+  "browserify": {
+    "transform": [
+      "ampersand-version"
+    ]
+  },
   "bugs": {
     "url": "https://github.com/ampersandjs/ampersand-sync/issues"
   },
   "dependencies": {
+    "ampersand-version": "^1.0.0",
     "qs": "^2.2.4",
     "underscore": "~1.6.0",
     "xhr": "^1.10.0"

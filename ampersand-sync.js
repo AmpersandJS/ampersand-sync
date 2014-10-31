@@ -1,3 +1,4 @@
+/*$AMPERSAND_VERSION*/
 var _ = require('underscore');
 var xhr = require('xhr');
 var qs = require('qs');
