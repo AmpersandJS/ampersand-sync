@@ -12,7 +12,7 @@ var urlError = function () {
 
 module.exports = function (method, model, options) {
     var type = methodMap[method];
-    var headers = {};
+    var headers = {Accept: 'application/json'};
 
     // Default options, unless specified.
     _.defaults(options || (options = {}), {
