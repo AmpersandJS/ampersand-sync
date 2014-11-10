@@ -216,3 +216,21 @@ test('Call user provided beforeSend function.', function (t) {
     });
     t.end();
 });
+
+test('Call user provided beforeSend function from model\'s ajaxConfig when no custom xhrFields are passed', function (t) {
+    t.plan(1);
+
+    var Me = Model.extend({
+        url: '/hi',
+        ajaxConfig: {
+            beforeSend: function (xhr) {
+                t.pass();
+            }
+        }
+    });
+
+    var m = new Me();
+    var xhr = sync('create', m);
+
+    t.end();
+});

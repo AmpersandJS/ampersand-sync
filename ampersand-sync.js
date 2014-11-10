@@ -87,6 +87,8 @@ module.exports = function (method, model, options) {
             if (beforeSend) return beforeSend.apply(this, arguments);
         };
         params.xhrFields = ajaxConfig.xhrFields;
+    } else {
+        params.beforeSend = ajaxConfig.beforeSend;
     }
 
     // Turn a jQuery.ajax formatted request into xhr compatible
