@@ -17,13 +17,16 @@ function getStub(data) {
 }
 
 test('should allow models to overwrite ajax configs at the model level', function (t) {
-    t.plan(3);
+    t.plan(4);
     var Me = Model.extend({
         url: '/hi',
         ajaxConfig: {
             useXDR: true,
             xhrFields: {
                 withCredentials: true
+            },
+            headers: {
+                Accept: 'application/xml'
             }
         }
     });
@@ -32,6 +35,7 @@ test('should allow models to overwrite ajax configs at the model level', functio
         t.equal(ajaxSettings.type, 'GET');
         t.equal(ajaxSettings.xhrFields.withCredentials, true);
         t.equal(ajaxSettings.useXDR, true);
+        t.equal(ajaxSettings.headers['Accept'], 'application/xml');
         t.end();
     });
     var xhr = sync('read', m);
@@ -214,5 +218,11 @@ test('Call user provided beforeSend function.', function (t) {
         },
         emulateHTTP: true
     });
+    t.end();
+});
+
+test('should default to Accept: application/json', function (t) {
+    var xhr = sync('read', getStub());
+    t.equal(xhr.ajaxSettings.headers['Accept'], 'application/json');
     t.end();
 });
