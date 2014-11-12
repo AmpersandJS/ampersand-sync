@@ -27,7 +27,7 @@ module.exports = function (method, model, options) {
 
     // Ensure that we have a URL.
     if (!options.url) {
-        params.url = _.result(model, 'url') || urlError();
+        options.url = _.result(model, 'url') || urlError();
     }
 
     // Ensure that we have the appropriate request data.
@@ -38,8 +38,8 @@ module.exports = function (method, model, options) {
     // If passed a data param, we add it to the URL or body depending on request type
     if (options.data && type === 'GET') {
         // make sure we've got a '?'
-        params.url += _.contains(params.url, '?') ? '&' : '?';
-        params.url += qs.stringify(options.data);
+        options.url += _.contains(options.url, '?') ? '&' : '?';
+        options.url += qs.stringify(options.data);
     }
 
     // For older servers, emulate JSON by encoding the request into an HTML-form.
