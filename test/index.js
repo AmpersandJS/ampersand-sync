@@ -43,6 +43,8 @@ test('read', function (t) {
     t.equal(xhr.ajaxSettings.type, 'GET');
     t.ok(!xhr.ajaxSettings.json);
     t.ok(!xhr.ajaxSettings.data);
+    var xhr2 = sync('read', getStub(), {url: '/library/books'});
+    t.equal(xhr2.ajaxSettings.url, '/library/books', 'passed url should overwrite model url');
     t.end();
 });
 
@@ -54,6 +56,8 @@ test('passing data', function (t) {
     otherStub.url = '/library?something=hi';
     var xhr2 = sync('read', otherStub, {data: {a: 'a', one: 1}});
     t.equal(xhr2.ajaxSettings.url, '/library?something=hi&a=a&one=1', 'data passed to reads should be made into a query string');
+    var xhr3 = sync('read', getStub(), {url: '/library/books', data: {a: 'a', one: 1}});
+    t.equal(xhr3.ajaxSettings.url, '/library/books?a=a&one=1', 'data passed to reads should added to query string for passed url');
     t.end();
 });
 
