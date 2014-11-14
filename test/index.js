@@ -52,12 +52,14 @@ test('passing data', function (t) {
     // on reads it should be part of the URL
     var xhr = sync('read', getStub(), {data: {a: 'a', one: 1}});
     t.equal(xhr.ajaxSettings.url, '/library?a=a&one=1', 'data passed to reads should be made into a query string');
-    var otherStub = getStub();
-    otherStub.url = '/library?something=hi';
-    var xhr2 = sync('read', otherStub, {data: {a: 'a', one: 1}});
-    t.equal(xhr2.ajaxSettings.url, '/library?something=hi&a=a&one=1', 'data passed to reads should be made into a query string');
+
+    var modelStub = getStub();
+    modelStub.url = '/library?something=hi';
+    var xhr2 = sync('read', modelStub, {data: {a: 'a', one: 1}});
+    t.equal(xhr2.ajaxSettings.url, '/library?something=hi&a=a&one=1', 'data passed to reads should be appended to an existing query string in the url');
+
     var xhr3 = sync('read', getStub(), {url: '/library/books', data: {a: 'a', one: 1}});
-    t.equal(xhr3.ajaxSettings.url, '/library/books?a=a&one=1', 'data passed to reads should added to query string for passed url');
+    t.equal(xhr3.ajaxSettings.url, '/library/books?a=a&one=1', 'data passed to reads should be added as a query string to overwritten url');
     t.end();
 });
 
