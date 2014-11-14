@@ -1,7 +1,7 @@
 {
   "name": "ampersand-sync",
   "description": "Provides sync behavior for updating data from ampersand models and collections to the server.",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "author": "Henrik Joreteg <henrik@andyet.net>",
   "browserify": {
     "transform": [
