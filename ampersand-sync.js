@@ -12,7 +12,7 @@ var urlError = function () {
 
 module.exports = function (method, model, options) {
     var type = methodMap[method];
-    var headers = {};
+    var headers = _.pick(options, 'headers').headers || {};
 
     // Default options, unless specified.
     _.defaults(options || (options = {}), {
@@ -94,7 +94,7 @@ module.exports = function (method, model, options) {
     // Turn a jQuery.ajax formatted request into xhr compatible
     params.method = params.type;
 
-    var ajaxSettings = _.extend(params, options);
+    var ajaxSettings = _.extend(params, _.omit(options, 'headers'));
 
     // Make the request. The callback executes functions that are compatible
     // With jQuery.ajax's syntax.
