@@ -240,3 +240,29 @@ test('Call user provided beforeSend function from model\'s ajaxConfig when no cu
 
     t.end();
 });
+
+test('options.headers should not should not replace ajaxConfig.headers', function (t) {
+    t.plan(3);
+    var Me = Model.extend({
+        url: '/hi',
+        ajaxConfig: {
+            headers: {
+                foo: 'i am foo',
+                bar: 'i am bar'
+            }
+        }
+    });
+    var m = new Me();
+    var headers = {
+        bar: 'now, i am baz',
+        qux: 'qux is me'
+    };
+    m.on('request', function (model, xhr, options, ajaxSettings) {
+        console.log('ajaxSettings.headers:', ajaxSettings.headers);
+        t.equal(ajaxSettings.headers, headers);
+        t.equal(ajaxSettings.headers.foo, m.ajaxConfig.headers.foo);
+        t.equal(ajaxSettings.headers.bar, headers.bar);
+        t.end();
+    });
+    var xhr = sync('read', m, {headers: headers});
+});
