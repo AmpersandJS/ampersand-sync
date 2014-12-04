@@ -10,7 +10,7 @@ In moving from 1.0.1 to 1.0.2 we switched the underlying ajax implementation fro
 
 Previously `ajaxConfig` would be passed the current ajax parameters object for modification, now it receives no arguments and should just return options to be merged in to the ajax parameters which will be passed to xhr.
 
-This should have been a major release both for this module and it's dependents (ampersand-model, ampersand-rest-collection, ampersand-collection-rest-mixin), but unfortunately we made a mistake and published as 1.0.2, and were too slow to rollback our mistake before workarounds were in place.
+This should have been a major release both for this module and its dependents (ampersand-model, ampersand-rest-collection, ampersand-collection-rest-mixin), but unfortunately we made a mistake and published as 1.0.2, and were too slow to rollback our mistake before workarounds were in place.
 
 As such we are leaving the current 1.0.x versions in place, but deprecated, and suggest people upgrade to the latest versions of model/collection when they can which will contain the new implementation of xhr.
 
