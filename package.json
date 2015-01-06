@@ -1,7 +1,7 @@
 {
-  "name": "ampersand-sync",
+  "name": "ampersand-sync-with-promise",
   "description": "Provides sync behavior for updating data from ampersand models and collections to the server. With a flavor of promise.",
-  "version": "3.0.3",
+  "version": "2.0.0",
   "author": [
     "Tri Nguyen <tri@tridnguyen.com>",
     "Henrik Joreteg <henrik@andyet.net>"
