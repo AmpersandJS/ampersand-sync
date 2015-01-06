@@ -115,6 +115,7 @@ module.exports = function (method, model, options) {
                 try {
                     body = JSON.parse(body);
                 } catch (err) {
+                    if (options.error) options.error(resp, 'error', err.message);
                     reject(err);
                 }
             }
