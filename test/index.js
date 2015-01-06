@@ -42,6 +42,8 @@ test('read', function (t) {
     t.equal(xhr.ajaxSettings.type, 'GET');
     t.ok(!xhr.ajaxSettings.json);
     t.ok(!xhr.ajaxSettings.data);
+    var xhr2 = sync('read', getStub(), {url: '/library/books'});
+    t.equal(xhr2.ajaxSettings.url, '/library/books', 'passed url should overwrite model url');
     t.end();
 });
 
@@ -49,10 +51,14 @@ test('passing data', function (t) {
     // on reads it should be part of the URL
     var xhr = sync('read', getStub(), {data: {a: 'a', one: 1}}).request;
     t.equal(xhr.ajaxSettings.url, '/library?a=a&one=1', 'data passed to reads should be made into a query string');
-    var otherStub = getStub();
-    otherStub.url = '/library?something=hi';
-    var xhr2 = sync('read', otherStub, {data: {a: 'a', one: 1}}).request;
-    t.equal(xhr2.ajaxSettings.url, '/library?something=hi&a=a&one=1', 'data passed to reads should be made into a query string');
+
+    var modelStub = getStub();
+    modelStub.url = '/library?something=hi';
+    var xhr2 = sync('read', modelStub, {data: {a: 'a', one: 1}}).request;
+    t.equal(xhr2.ajaxSettings.url, '/library?something=hi&a=a&one=1', 'data passed to reads should be appended to an existing query string in the url');
+
+    var xhr3 = sync('read', getStub(), {url: '/library/books', data: {a: 'a', one: 1}}).request;
+    t.equal(xhr3.ajaxSettings.url, '/library/books?a=a&one=1', 'data passed to reads should be added as a query string to overwritten url');
     t.end();
 });
 
@@ -125,7 +131,7 @@ test('update with just emulateHTTP', function (t) {
 });
 
 
-test("update with just emulateJSON", function (t) {
+test('update with just emulateJSON', function (t) {
     var xhr = sync('update', getStub({
             id: '2-the-tempest',
             author: 'Tim Shakespeare',
@@ -188,6 +194,23 @@ test('Call provided error callback on error.', function (t) {
     xhr.ajaxSettings.error();
 });
 
+test('Call provided error callback is bad JSON error.', function (t) {
+    t.plan(3);
+
+    var xhr = sync('read', getStub(), {
+        error: function (resp, type, error) {
+            t.deepEqual(resp, {}, 'should be passed through response');
+            t.equal(type, 'error', 'is string \'error\' as per jquery');
+            t.equal(error, 'Unable to parse JSON string', 'should be json parse message');
+            t.end();
+        },
+        xhrImplementation: function (ajaxSettings, callback) {
+            callback(null, {}, '{"bad": "json');
+            return {};
+        }
+    }).request;
+});
+
 test('Call user provided beforeSend function.', function (t) {
     t.plan(1);
     var xhr = sync('delete', getStub(), {
@@ -196,5 +219,23 @@ test('Call user provided beforeSend function.', function (t) {
         },
         emulateHTTP: true
     }).request;
+    t.end();
+});
+
+test('Call user provided beforeSend function from model\'s ajaxConfig when no custom xhrFields are passed', function (t) {
+    t.plan(1);
+
+    var Me = Model.extend({
+        url: '/hi',
+        ajaxConfig: {
+            beforeSend: function (xhr) {
+                t.pass();
+            }
+        }
+    });
+
+    var m = new Me();
+    var xhr = sync('create', m).request;
+
     t.end();
 });

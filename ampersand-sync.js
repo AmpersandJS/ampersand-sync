@@ -1,3 +1,4 @@
+/*$AMPERSAND_VERSION*/
 var _ = require('underscore');
 var xhr = require('xhr');
 var qs = require('qs');
@@ -18,7 +19,9 @@ module.exports = function (method, model, options) {
     // Default options, unless specified.
     _.defaults(options || (options = {}), {
         emulateHTTP: false,
-        emulateJSON: false
+        emulateJSON: false,
+        // overrideable primarily to enable testing
+        xhrImplementation: xhr
     });
 
     // Default request options.
@@ -26,7 +29,7 @@ module.exports = function (method, model, options) {
 
     // Ensure that we have a URL.
     if (!options.url) {
-        params.url = _.result(model, 'url') || urlError();
+        options.url = _.result(model, 'url') || urlError();
     }
 
     // Ensure that we have the appropriate request data.
@@ -37,8 +40,8 @@ module.exports = function (method, model, options) {
     // If passed a data param, we add it to the URL or body depending on request type
     if (options.data && type === 'GET') {
         // make sure we've got a '?'
-        params.url += _.contains(params.url, '?') ? '&' : '?';
-        params.url += qs.stringify(options.data);
+        options.url += _.contains(options.url, '?') ? '&' : '?';
+        options.url += qs.stringify(options.data);
     }
 
     // For older servers, emulate JSON by encoding the request into an HTML-form.
@@ -86,6 +89,8 @@ module.exports = function (method, model, options) {
             if (beforeSend) return beforeSend.apply(this, arguments);
         };
         params.xhrFields = ajaxConfig.xhrFields;
+    } else {
+        params.beforeSend = ajaxConfig.beforeSend;
     }
 
     // Turn a jQuery.ajax formatted request into xhr compatible
@@ -97,7 +102,7 @@ module.exports = function (method, model, options) {
     // Make the request. The callback executes functions that are compatible
     // With jQuery.ajax's syntax.
     var promise = new TPromise(function (resolve, reject) {
-        request = xhr(ajaxSettings, function (err, resp, body) {
+        request = options.xhr = options.xhrImplementation(ajaxSettings, function (err, resp, body) {
             if (err) {
                 if (options.error) {
                     options.error(resp, 'error', err.message);
@@ -109,8 +114,8 @@ module.exports = function (method, model, options) {
             if (body && typeof body === 'string') {
                 try {
                     body = JSON.parse(body);
-                } catch (e) {
-                    reject(e);
+                } catch (err) {
+                    reject(err);
                 }
             }
             if (options.success) options.success(body, 'success', resp);
