@@ -42,7 +42,7 @@ test('read', function (t) {
     t.equal(xhr.ajaxSettings.type, 'GET');
     t.ok(!xhr.ajaxSettings.json);
     t.ok(!xhr.ajaxSettings.data);
-    var xhr2 = sync('read', getStub(), {url: '/library/books'});
+    var xhr2 = sync('read', getStub(), {url: '/library/books'}).request;
     t.equal(xhr2.ajaxSettings.url, '/library/books', 'passed url should overwrite model url');
     t.end();
 });
