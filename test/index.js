@@ -202,7 +202,7 @@ test('Call provided error callback is bad JSON error.', function (t) {
         error: function (resp, type, error) {
             t.deepEqual(resp, {}, 'should be passed through response');
             t.equal(type, 'error', 'is string \'error\' as per jquery');
-            t.equal(error, 'Unable to parse JSON string', 'should be json parse message');
+            t.ok(error=='Unable to parse JSON string' || error=='Unexpected end of input', 'should be json parse message');
             t.end();
         },
         xhrImplementation: function (ajaxSettings, callback) {
@@ -211,6 +211,23 @@ test('Call provided error callback is bad JSON error.', function (t) {
         }
     });
 });
+
+test('Don\'t call success when error occurs and there\'s no error callback', function (t) {
+    t.plan(1);
+
+    var xhr = sync('read', getStub(), {
+        success: function (resp, type, error) {
+            t.fail('doh');
+        },
+        xhrImplementation: function (ajaxSettings, callback) {
+            callback(new Error(), {}, '{"good": "json"}');
+            t.pass();
+            t.end();
+            return {};
+        }
+    });
+});
+
 
 test('Call user provided beforeSend function.', function (t) {
     t.plan(1);
