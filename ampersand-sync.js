@@ -1,5 +1,8 @@
 /*$AMPERSAND_VERSION*/
-var _ = require('underscore');
+var result = require("lodash.result");
+var defaults = require("lodash.defaults");
+var contains = require("lodash.contains");
+var assign = require("lodash.assign");
 var xhr = require('xhr');
 var qs = require('qs');
 
@@ -15,7 +18,7 @@ module.exports = function (method, model, options) {
     var headers = {};
 
     // Default options, unless specified.
-    _.defaults(options || (options = {}), {
+    defaults(options || (options = {}), {
         emulateHTTP: false,
         emulateJSON: false,
         // overrideable primarily to enable testing
@@ -27,7 +30,7 @@ module.exports = function (method, model, options) {
 
     // Ensure that we have a URL.
     if (!options.url) {
-        options.url = _.result(model, 'url') || urlError();
+        options.url = result(model, 'url') || urlError();
     }
 
     // Ensure that we have the appropriate request data.
@@ -38,7 +41,7 @@ module.exports = function (method, model, options) {
     // If passed a data param, we add it to the URL or body depending on request type
     if (options.data && type === 'GET') {
         // make sure we've got a '?'
-        options.url += _.contains(options.url, '?') ? '&' : '?';
+        options.url += contains(options.url, '?') ? '&' : '?';
         options.url += qs.stringify(options.data);
     }
 
@@ -64,11 +67,11 @@ module.exports = function (method, model, options) {
     }
 
     // Start setting ajaxConfig options (headers, xhrFields).
-    var ajaxConfig = (_.result(model, 'ajaxConfig') || {});
+    var ajaxConfig = (result(model, 'ajaxConfig') || {});
 
     // Combine generated headers with user's headers.
     if (ajaxConfig.headers) {
-        _.extend(headers, ajaxConfig.headers);
+        assign(headers, ajaxConfig.headers);
     }
     params.headers = headers;
 
@@ -94,7 +97,7 @@ module.exports = function (method, model, options) {
     // Turn a jQuery.ajax formatted request into xhr compatible
     params.method = params.type;
 
-    var ajaxSettings = _.extend(params, options);
+    var ajaxSettings = assign(params, options);
 
     // Make the request. The callback executes functions that are compatible
     // With jQuery.ajax's syntax.
