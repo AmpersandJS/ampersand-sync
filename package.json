@@ -15,7 +15,7 @@
     "ampersand-version": "^1.0.0",
     "qs": "^2.2.4",
     "underscore": "~1.6.0",
-    "xhr": "^1.10.0"
+    "xhr": "^2.0.1"
   },
   "devDependencies": {
     "ampersand-model": "^4.0.1",
