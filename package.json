@@ -14,8 +14,8 @@
   "dependencies": {
     "ampersand-version": "^1.0.0",
     "lodash.assign": "^3.0.0",
-    "lodash.contains": "^2.4.1",
     "lodash.defaults": "^3.1.0",
+    "lodash.includes": "^3.1.0",
     "lodash.result": "^3.0.0",
     "qs": "^2.2.4",
     "xhr": "^1.10.0"

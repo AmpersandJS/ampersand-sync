@@ -1,7 +1,7 @@
 /*$AMPERSAND_VERSION*/
 var result = require("lodash.result");
 var defaults = require("lodash.defaults");
-var contains = require("lodash.contains");
+var includes = require("lodash.includes");
 var assign = require("lodash.assign");
 var xhr = require('xhr');
 var qs = require('qs');
@@ -41,7 +41,7 @@ module.exports = function (method, model, options) {
     // If passed a data param, we add it to the URL or body depending on request type
     if (options.data && type === 'GET') {
         // make sure we've got a '?'
-        options.url += contains(options.url, '?') ? '&' : '?';
+        options.url += includes(options.url, '?') ? '&' : '?';
         options.url += qs.stringify(options.data);
     }
 
