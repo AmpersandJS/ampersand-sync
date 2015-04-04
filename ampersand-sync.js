@@ -1,8 +1,8 @@
 /*$AMPERSAND_VERSION*/
-var result = require("lodash.result");
-var defaults = require("lodash.defaults");
-var includes = require("lodash.includes");
-var assign = require("lodash.assign");
+var result = require('lodash.result');
+var defaults = require('lodash.defaults');
+var includes = require('lodash.includes');
+var assign = require('lodash.assign');
 var xhr = require('xhr');
 var qs = require('qs');
 
@@ -12,6 +12,14 @@ var urlError = function () {
     throw new Error('A "url" property or function must be specified');
 };
 
+// Map from CRUD to HTTP for our default `Backbone.sync` implementation.
+var methodMap = {
+    'create': 'POST',
+    'update': 'PUT',
+    'patch':  'PATCH',
+    'delete': 'DELETE',
+    'read':   'GET'
+};
 
 module.exports = function (method, model, options) {
     var type = methodMap[method];
@@ -117,13 +125,4 @@ module.exports = function (method, model, options) {
     model.trigger('request', model, request, options, ajaxSettings);
     request.ajaxSettings = ajaxSettings;
     return request;
-};
-
-// Map from CRUD to HTTP for our default `Backbone.sync` implementation.
-var methodMap = {
-    'create': 'POST',
-    'update': 'PUT',
-    'patch':  'PATCH',
-    'delete': 'DELETE',
-    'read':   'GET'
 };
