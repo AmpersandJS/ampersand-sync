@@ -21,6 +21,7 @@
     "lodash.includes": "^3.1.0",
     "lodash.result": "^3.0.0",
     "qs": "^2.2.4",
+    "request": "^2.55.0",
     "xhr": "^2.0.1"
   },
   "devDependencies": {
@@ -44,6 +45,7 @@
   ],
   "license": "MIT",
   "main": "ampersand-sync.js",
+  "browser": "ampersand-sync-browser.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/ampersandjs/ampersand-sync.git"

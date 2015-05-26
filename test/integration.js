@@ -1,5 +1,5 @@
 var test = require('tape');
-var sync = require('../ampersand-sync');
+var sync = require('../');
 var Model = require('ampersand-model');
 
 
