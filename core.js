@@ -1,11 +1,11 @@
 /*$AMPERSAND_VERSION*/
-module.exports = function (xhr) {
-  var result = require('lodash.result');
-  var defaults = require('lodash.defaults');
-  var includes = require('lodash.includes');
-  var assign = require('lodash.assign');
-  var qs = require('qs');
+var result = require('lodash.result');
+var defaults = require('lodash.defaults');
+var includes = require('lodash.includes');
+var assign = require('lodash.assign');
+var qs = require('qs');
 
+module.exports = function (xhr) {
 
   // Throw an error when a URL is needed, and none is supplied.
   var urlError = function () {

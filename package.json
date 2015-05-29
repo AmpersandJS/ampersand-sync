@@ -28,6 +28,7 @@
     "ampersand-model": "^4.0.1",
     "ampersand-rest-collection": "^2.0.1",
     "browserify": "^6.2.0",
+    "concat-stream": "^1.4.8",
     "jshint": "^2.5.3",
     "phantomjs": "^1.9.12",
     "precommit-hook": "^1.0.7",
@@ -52,7 +53,7 @@
   },
   "scripts": {
     "start": "run-browser test/*",
-    "test": "browserify test/index.js | tape-run | tap-spec"
+    "test": "browserify test/index.js | tape-run | tap-spec && node test/index.js"
   },
   "testling": {
     "files": "test/*.js",
