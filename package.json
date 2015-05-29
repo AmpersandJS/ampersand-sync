@@ -4,7 +4,8 @@
   "version": "3.0.7",
   "author": "Henrik Joreteg <henrik@andyet.net>",
   "files": [
-    "ampersand-sync.js"
+    "ampersand-sync*",
+    "core.js"
   ],
   "browserify": {
     "transform": [
