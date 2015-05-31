@@ -50,15 +50,21 @@ test('read', function (t) {
 
 test('passing data', function (t) {
     // on reads it should be part of the URL
-    var xhr = sync('read', getStub(), {data: {a: 'a', one: 1}});
+    
+    //create a plain object, with no prototypal inheritance, like qs@v3 does 
+    var data = Object.create(null);
+    data.a = 'a';
+    data.one = 1;
+    
+    var xhr = sync('read', getStub(), {data: data});
     t.equal(xhr.ajaxSettings.url, '/library?a=a&one=1', 'data passed to reads should be made into a query string');
 
     var modelStub = getStub();
     modelStub.url = '/library?something=hi';
-    var xhr2 = sync('read', modelStub, {data: {a: 'a', one: 1}});
+    var xhr2 = sync('read', modelStub, {data: data});
     t.equal(xhr2.ajaxSettings.url, '/library?something=hi&a=a&one=1', 'data passed to reads should be appended to an existing query string in the url');
 
-    var xhr3 = sync('read', getStub(), {url: '/library/books', data: {a: 'a', one: 1}});
+    var xhr3 = sync('read', getStub(), {url: '/library/books', data: data});
     t.equal(xhr3.ajaxSettings.url, '/library/books?a=a&one=1', 'data passed to reads should be added as a query string to overwritten url');
     t.end();
 });

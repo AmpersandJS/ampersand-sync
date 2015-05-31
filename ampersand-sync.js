@@ -51,6 +51,8 @@ module.exports = function (method, model, options) {
         // make sure we've got a '?'
         options.url += includes(options.url, '?') ? '&' : '?';
         options.url += qs.stringify(options.data);
+        //delete `data` so `xhr` doesn't use it as a body
+        delete options.data;
     }
 
     // For older servers, emulate JSON by encoding the request into an HTML-form.
