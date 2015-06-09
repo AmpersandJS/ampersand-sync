@@ -110,18 +110,25 @@ module.exports = function (xhr) {
       // Make the request. The callback executes functions that are compatible
       // With jQuery.ajax's syntax.
       var request = options.xhr = options.xhrImplementation(ajaxSettings, function (err, resp, body) {
-          if (err || resp.statusCode >= 400) {
+          if (err) {
+              // Not sure when err !== 'undefined' && body
               if (options.error) return options.error(resp, 'error', err.message || body);
-          } else {
-              // Parse body as JSON if a string.
-              if (body && typeof body === 'string') {
-                  try {
-                      body = JSON.parse(body);
-                  } catch (err) {
-                      if (options.error) return options.error(resp, 'error', err.message);
-                  }
-              }
-              if (options.success) return options.success(body, 'success', resp);
+          }
+          // XHR does not return error message >= 400.
+          else if ( resp.statusCode >= 400 ) {
+              if ( options.error ) return options.error(resp, 'error', '[ampersand-model] HTTP Status Code 4xx: Client Error' );
+          }
+          // Parse body as JSON if a string.
+          else if (body && typeof body === 'string') {
+            try {
+                body = JSON.parse(body);
+            } catch (jsonError) {
+                if (options.error) return options.error(resp, 'error', jsonError.message);
+            }
+            if (options.success) return options.success(body, 'success', resp);
+          }
+          else {
+            if (options.success) return options.success(body, 'success', resp);
           }
       });
       model.trigger('request', model, request, options, ajaxSettings);
