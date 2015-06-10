@@ -111,7 +111,7 @@ module.exports = function (xhr) {
       // With jQuery.ajax's syntax.
       var request = options.xhr = options.xhrImplementation(ajaxSettings, function (err, resp, body) {
           if (err || resp.statusCode >= 400) {
-              if (options.error) return options.error(resp, 'error', err.message || body);
+              if (options.error) return options.error(resp, 'error', (err? err.message : body));
           } else {
               // Parse body as JSON if a string.
               if (body && typeof body === 'string') {
