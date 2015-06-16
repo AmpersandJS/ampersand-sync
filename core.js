@@ -113,7 +113,7 @@ module.exports = function (xhr) {
           if (err || resp.statusCode >= 400) {
               if (options.error) {
                   var message = (err? err.message : (body || "HTTP"+resp.statusCode));
-                  return options.error(resp, 'error', message);
+                  options.error(resp, 'error', message);
               }
           } else {
               // Parse body as JSON if a string.
@@ -121,11 +121,14 @@ module.exports = function (xhr) {
                   try {
                       body = JSON.parse(body);
                   } catch (err) {
-                      if (options.error) return options.error(resp, 'error', err.message);
+                      if (options.error) options.error(resp, 'error', err.message);
+                      if (options.always) options.always(err, resp, body);
+                      return;
                   }
               }
-              if (options.success) return options.success(body, 'success', resp);
+              if (options.success) options.success(body, 'success', resp);
           }
+          if (options.always) options.always(err, resp, body);
       });
       model.trigger('request', model, request, options, ajaxSettings);
       request.ajaxSettings = ajaxSettings;

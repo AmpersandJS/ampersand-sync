@@ -257,3 +257,34 @@ test('should not call success when error occurs and there\'s no error callback',
         }
     });
 });
+
+test('Call "always" after success callback', function (t) {
+    t.plan(1);
+
+    var xhr = sync('read', modelStub(), {
+        always: function (err, resp, body) {
+            t.equal(err, null, 'error param is null');
+            t.end();
+        },
+        xhrImplementation: function (ajaxSettings, callback) {
+            callback(null, {}, '{"good": "json"}');
+            return {};
+        }
+    });
+});
+
+test('Call "always" after error callback', function (t) {
+    t.plan(1);
+
+    var xhr = sync('read', modelStub(), {
+        always: function (err, resp, body) {
+            t.pass();
+            t.end();
+        },
+        xhrImplementation: function (ajaxSettings, callback) {
+           callback(new Error(), {}, '{"good": "json"}');
+           return {};
+        }
+    });
+});
+
