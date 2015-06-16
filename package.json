@@ -1,8 +1,11 @@
 {
   "name": "ampersand-sync",
   "description": "Provides sync behavior for updating data from ampersand models and collections to the server.",
-  "version": "3.0.3",
+  "version": "3.0.7",
   "author": "Henrik Joreteg <henrik@andyet.net>",
+  "files": [
+    "ampersand-sync.js"
+  ],
   "browserify": {
     "transform": [
       "ampersand-version"
@@ -13,8 +16,11 @@
   },
   "dependencies": {
     "ampersand-version": "^1.0.0",
+    "lodash.assign": "^3.0.0",
+    "lodash.defaults": "^3.1.0",
+    "lodash.includes": "^3.1.0",
+    "lodash.result": "^3.0.0",
     "qs": "^2.2.4",
-    "underscore": "~1.6.0",
     "xhr": "^1.10.0"
   },
   "devDependencies": {
