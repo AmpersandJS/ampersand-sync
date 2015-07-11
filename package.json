@@ -21,7 +21,7 @@
     "lodash.includes": "^3.1.0",
     "lodash.result": "^3.0.0",
     "qs": "^2.2.4",
-    "xhr": "^1.10.0"
+    "xhr": "^2.0.1"
   },
   "devDependencies": {
     "ampersand-model": "^4.0.1",
@@ -50,7 +50,7 @@
   },
   "scripts": {
     "start": "run-browser test/*",
-    "test": "browserify test/* | tape-run | tap-spec"
+    "test": "browserify test/index.js | tape-run | tap-spec"
   },
   "testling": {
     "files": "test/*.js",
