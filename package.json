@@ -4,7 +4,8 @@
   "version": "3.0.7",
   "author": "Henrik Joreteg <henrik@andyet.net>",
   "files": [
-    "ampersand-sync.js"
+    "ampersand-sync*",
+    "core.js"
   ],
   "browserify": {
     "transform": [
@@ -21,12 +22,14 @@
     "lodash.includes": "^3.1.0",
     "lodash.result": "^3.0.0",
     "qs": "^2.2.4",
+    "request": "^2.55.0",
     "xhr": "^2.0.1"
   },
   "devDependencies": {
     "ampersand-model": "^4.0.1",
     "ampersand-rest-collection": "^2.0.1",
     "browserify": "^6.2.0",
+    "concat-stream": "^1.4.8",
     "jshint": "^2.5.3",
     "phantomjs": "^1.9.12",
     "precommit-hook": "^1.0.7",
@@ -44,13 +47,14 @@
   ],
   "license": "MIT",
   "main": "ampersand-sync.js",
+  "browser": "ampersand-sync-browser.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/ampersandjs/ampersand-sync.git"
   },
   "scripts": {
     "start": "run-browser test/*",
-    "test": "browserify test/index.js | tape-run | tap-spec"
+    "test": "browserify test/index.js | tape-run | tap-spec && node test/index.js"
   },
   "testling": {
     "files": "test/*.js",

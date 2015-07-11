@@ -1,2 +1,2 @@
-var xhr = require('request');
+var xhr = require('xhr');
 module.exports = require('./core')(xhr);
