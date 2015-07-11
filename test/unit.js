@@ -7,13 +7,16 @@ var Model = require('ampersand-model');
 var sync = syncCore(reqStub());
 
 test('should allow models to overwrite ajax configs at the model level', function (t) {
-    t.plan(6);
+    t.plan(7);
     var Me = Model.extend({
         url: '/hi',
         ajaxConfig: {
             useXDR: true,
             xhrFields: {
                 withCredentials: true
+            },
+            headers: {
+                Accept: 'application/xml'
             }
         }
     });
@@ -22,6 +25,7 @@ test('should allow models to overwrite ajax configs at the model level', functio
         t.equal(ajaxSettings.type, 'GET');
         t.equal(ajaxSettings.xhrFields.withCredentials, true);
         t.equal(ajaxSettings.useXDR, true);
+        t.equal(ajaxSettings.headers.Accept, 'application/xml');
         t.equal(reqStub.recentOpts.method, 'GET');
         t.equal(reqStub.recentOpts.useXDR, true);
         t.ok(reqStub.recentOpts.beforeSend);
@@ -101,6 +105,12 @@ test('update', function (t) {
     var data = reqStub.recentOpts.json;
     t.equal(data.id, '1-the-tempest');
     t.equal(data.author, 'William Shakespeare');
+    t.end();
+});
+
+test('should default to Accept: application/json', function (t) {
+    var xhr = sync('read', modelStub());
+    t.equal(xhr.ajaxSettings.headers.Accept, 'application/json');
     t.end();
 });
 
