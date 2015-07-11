@@ -211,7 +211,21 @@ test('should call provided error callback on error.', function (t) {
     });
 });
 
-test('should call provided error callback is bad JSON error.', function (t) {
+test('should call provided error callback on HTTP error.', function (t) {
+    t.plan(1);
+    var xhr = sync('read', modelStub(), {
+        error: function (resp,type,error) {
+            t.equal(error,'HTTP400');
+            t.end();
+        },
+        xhrImplementation: function (ajaxSettings, callback) {
+            callback(null, {statusCode:400}, null);
+            return {};
+        }
+    });
+});
+
+test('should call provided error callback for bad JSON.', function (t) {
     t.plan(3);
 
     var xhr = sync('read', modelStub(), {
