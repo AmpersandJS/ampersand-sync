@@ -16,7 +16,7 @@ test('should allow models to overwrite ajax configs at the model level', functio
                 withCredentials: true
             },
             headers: {
-                Accept: 'application/xml'
+                accept: 'application/xml'
             }
         }
     });
@@ -25,7 +25,7 @@ test('should allow models to overwrite ajax configs at the model level', functio
         t.equal(ajaxSettings.type, 'GET');
         t.equal(ajaxSettings.xhrFields.withCredentials, true);
         t.equal(ajaxSettings.useXDR, true);
-        t.equal(ajaxSettings.headers.Accept, 'application/xml');
+        t.equal(ajaxSettings.headers.accept, 'application/xml');
         t.equal(reqStub.recentOpts.method, 'GET');
         t.equal(reqStub.recentOpts.useXDR, true);
         t.ok(reqStub.recentOpts.beforeSend);
@@ -108,9 +108,9 @@ test('update', function (t) {
     t.end();
 });
 
-test('should default to Accept: application/json', function (t) {
+test('should default to accept: application/json', function (t) {
     var xhr = sync('read', modelStub());
-    t.equal(xhr.ajaxSettings.headers.Accept, 'application/json');
+    t.equal(xhr.ajaxSettings.headers.accept, 'application/json');
     t.end();
 });
 
@@ -126,7 +126,7 @@ test('update with emulateHTTP and emulateJSON', function (t) {
     t.equal(reqStub.recentOpts.url, '/library');
     t.equal(reqStub.recentOpts.method, 'POST');
     t.equal(reqStub.recentOpts.body, 'model%5Bid%5D=2-the-tempest&model%5Bauthor%5D=Tim%20Shakespeare&model%5Blength%5D=123&_method=PUT');
-    t.equal(reqStub.recentOpts.headers['Content-Type'], 'application/x-www-form-urlencoded');
+    t.equal(reqStub.recentOpts.headers['content-type'], 'application/x-www-form-urlencoded');
     t.end();
 });
 
@@ -159,7 +159,7 @@ test('update with just emulateJSON', function (t) {
     });
     t.equal(reqStub.recentOpts.url, '/library');
     t.equal(reqStub.recentOpts.method, 'PUT');
-    t.equal(reqStub.recentOpts.headers['Content-Type'], 'application/x-www-form-urlencoded');
+    t.equal(reqStub.recentOpts.headers['content-type'], 'application/x-www-form-urlencoded');
     t.equal(reqStub.recentOpts.body, 'model%5Bid%5D=2-the-tempest&model%5Bauthor%5D=Tim%20Shakespeare&model%5Blength%5D=123');
     t.end();
 });

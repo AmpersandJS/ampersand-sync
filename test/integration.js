@@ -36,6 +36,31 @@ test('should get a response for read', function (t) {
     });
 });
 
+test('should not parse body when not expecting JSON', function (t) {
+    t.plan(1);
+    var Me = Model.extend({
+        url: 'http://www.mocky.io/v2/54f1d2b932d8370a036e5b21',
+        ajaxConfig: {
+            useXDR: true,
+            headers: {
+                accept: 'application/xml'
+            }
+        }
+    });
+    var m = new Me();
+    //not calling fetch, as model also gives parsing JSON a try apparently
+    sync('read', m, {
+        success: function (data) {
+            t.equal(typeof data, 'string');
+            t.end();
+        },
+        error: function () {
+            t.fail('error while fetching (are you offline?)');
+            t.end();
+        }
+    });
+});
+
 test('should call error when read results in 404', function (t) {
     t.plan(1);
     var Me = Model.extend({
