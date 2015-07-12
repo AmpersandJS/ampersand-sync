@@ -113,7 +113,7 @@ module.exports = function (xhr) {
           if (err || resp.statusCode >= 400) {
               if (options.error) {
                   var message = (err? err.message : (body || "HTTP"+resp.statusCode));
-                  return options.error(resp, 'error', message, resp);
+                  return options.error(resp, 'error', message);
               }
           } else {
               // Parse body as JSON if a string.
