@@ -108,12 +108,6 @@ test('update', function (t) {
     t.end();
 });
 
-test('should default to accept: application/json', function (t) {
-    var xhr = sync('read', modelStub());
-    t.equal(xhr.ajaxSettings.headers.accept, 'application/json');
-    t.end();
-});
-
 test('update with emulateHTTP and emulateJSON', function (t) {
     var xhr = sync('update', modelStub({
         id: '2-the-tempest',
@@ -212,13 +206,12 @@ test('should call provided error callback on error.', function (t) {
 });
 
 test('should call provided error callback is bad JSON error.', function (t) {
-    t.plan(3);
+    t.plan(2);
 
     var xhr = sync('read', modelStub(), {
         error: function (resp, type, error) {
             t.deepEqual(resp, {}, 'should be passed through response');
             t.equal(type, 'error', 'is string \'error\' as per jquery');
-            t.ok(error == 'Unable to parse JSON string' || error == 'Unexpected end of input', 'should be json parse message');
             t.end();
         },
         xhrImplementation: function (ajaxSettings, callback) {

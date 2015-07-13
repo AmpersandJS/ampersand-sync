@@ -5,7 +5,12 @@ var includes = require('lodash.includes');
 var assign = require('lodash.assign');
 var qs = require('qs');
 
-var DEFAULT_ACCEPT = 'application/json';
+function isEmpty(obj){
+    for(var i in obj){
+        if(obj.hasOwnProperty(i)) return false;
+    }
+    return true;
+}
 
 module.exports = function (xhr) {
 
@@ -25,7 +30,7 @@ module.exports = function (xhr) {
 
   return function (method, model, options) {
       var type = methodMap[method];
-      var headers = { accept: DEFAULT_ACCEPT };
+      var headers = {};
 
       // Default options, unless specified.
       defaults(options || (options = {}), {
@@ -85,10 +90,13 @@ module.exports = function (xhr) {
               headers[key.toLowerCase()] = ajaxConfig.headers[key];
           }
       }
-      params.headers = headers;
+      //Because headers can't be set at all if we're using XDR in IE
+      if(!isEmpty(headers)){
+          params.headers = headers;
+      }
 
       //Set XDR for cross domain in IE8/9
-      if (ajaxConfig.useXDR) {
+      if (ajaxConfig.useXDR ) {
           params.useXDR = true;
       }
 
@@ -115,8 +123,8 @@ module.exports = function (xhr) {
           if (err || resp.statusCode >= 400) {
               if (options.error) return options.error(resp, 'error', (err? err.message : body));
           } else {
-              // Parse body as JSON if a string.
-              if (body && headers.accept === DEFAULT_ACCEPT && typeof body === 'string') {
+              // Parse body as JSON
+              if (typeof body === 'string' && (!headers.accept || headers.accept.indexOf('application/json')===0)) {
                   try {
                       body = JSON.parse(body);
                   } catch (err) {
