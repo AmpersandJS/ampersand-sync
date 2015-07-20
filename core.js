@@ -5,12 +5,6 @@ var includes = require('lodash.includes');
 var assign = require('lodash.assign');
 var qs = require('qs');
 
-function isEmpty(obj){
-    for(var i in obj){
-        if(obj.hasOwnProperty(i)) return false;
-    }
-    return true;
-}
 
 module.exports = function (xhr) {
 
@@ -90,10 +84,8 @@ module.exports = function (xhr) {
               headers[key.toLowerCase()] = ajaxConfig.headers[key];
           }
       }
-      //Because headers can't be set at all if we're using XDR in IE
-      if(!isEmpty(headers)){
-          params.headers = headers;
-      }
+      
+      params.headers = headers;
 
       //Set XDR for cross domain in IE8/9
       if (ajaxConfig.useXDR ) {

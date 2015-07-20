@@ -23,7 +23,7 @@
     "lodash.result": "^3.0.0",
     "qs": "^2.2.4",
     "request": "^2.55.0",
-    "xhr": "^2.0.1"
+    "xhr": "^2.0.3"
   },
   "devDependencies": {
     "ampersand-model": "^4.0.1",
