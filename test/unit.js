@@ -205,7 +205,22 @@ test('should call provided error callback on error.', function (t) {
     });
 });
 
-test('should call provided error callback is bad JSON error.', function (t) {
+
+test('should call provided error callback on HTTP error.', function (t) {
+    t.plan(1);
+    var xhr = sync('read', modelStub(), {
+        error: function (resp,type,error) {
+            t.equal(error,'HTTP400');
+            t.end();
+        },
+        xhrImplementation: function (ajaxSettings, callback) {
+            callback(null, {statusCode:400}, null);
+            return {};
+        }
+    });
+});
+
+test('should call provided error callback for bad JSON.', function (t) {
     t.plan(2);
 
     var xhr = sync('read', modelStub(), {
@@ -236,3 +251,34 @@ test('should not call success when error occurs and there\'s no error callback',
         }
     });
 });
+
+test('Call "always" after success callback', function (t) {
+    t.plan(1);
+
+    var xhr = sync('read', modelStub(), {
+        always: function (err, resp, body) {
+            t.equal(err, null, 'error param is null');
+            t.end();
+        },
+        xhrImplementation: function (ajaxSettings, callback) {
+            callback(null, {}, '{"good": "json"}');
+            return {};
+        }
+    });
+});
+
+test('Call "always" after error callback', function (t) {
+    t.plan(1);
+
+    var xhr = sync('read', modelStub(), {
+        always: function (err, resp, body) {
+            t.pass();
+            t.end();
+        },
+        xhrImplementation: function (ajaxSettings, callback) {
+           callback(new Error(), {}, '{"good": "json"}');
+           return {};
+        }
+    });
+});
+

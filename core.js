@@ -113,18 +113,24 @@ module.exports = function (xhr) {
       // With jQuery.ajax's syntax.
       var request = options.xhr = options.xhrImplementation(ajaxSettings, function (err, resp, body) {
           if (err || resp.statusCode >= 400) {
-              if (options.error) return options.error(resp, 'error', (err? err.message : body));
+              if (options.error) {
+                  var message = (err? err.message : (body || "HTTP"+resp.statusCode));
+                  options.error(resp, 'error', message);
+              }
           } else {
               // Parse body as JSON
               if (typeof body === 'string' && (!headers.accept || headers.accept.indexOf('application/json')===0)) {
                   try {
                       body = JSON.parse(body);
                   } catch (err) {
-                      if (options.error) return options.error(resp, 'error', err.message);
+                      if (options.error) options.error(resp, 'error', err.message);
+                      if (options.always) options.always(err, resp, body);
+                      return;
                   }
               }
-              if (options.success) return options.success(body, 'success', resp);
+              if (options.success) options.success(body, 'success', resp);
           }
+          if (options.always) options.always(err, resp, body);
       });
       model.trigger('request', model, request, options, ajaxSettings);
       request.ajaxSettings = ajaxSettings;
