@@ -5,6 +5,7 @@ var includes = require('lodash.includes');
 var assign = require('lodash.assign');
 var qs = require('qs');
 
+
 module.exports = function (xhr) {
 
   // Throw an error when a URL is needed, and none is supplied.
@@ -23,7 +24,7 @@ module.exports = function (xhr) {
 
   return function (method, model, options) {
       var type = methodMap[method];
-      var headers = { Accept: 'application/json' };
+      var headers = {};
 
       // Default options, unless specified.
       defaults(options || (options = {}), {
@@ -55,7 +56,7 @@ module.exports = function (xhr) {
 
       // For older servers, emulate JSON by encoding the request into an HTML-form.
       if (options.emulateJSON) {
-          headers['Content-Type'] = 'application/x-www-form-urlencoded';
+          headers['content-type'] = 'application/x-www-form-urlencoded';
           params.body = params.json ? {model: params.json} : {};
           delete params.json;
       }
@@ -65,7 +66,7 @@ module.exports = function (xhr) {
       if (options.emulateHTTP && (type === 'PUT' || type === 'DELETE' || type === 'PATCH')) {
           params.type = 'POST';
           if (options.emulateJSON) params.body._method = type;
-          headers['X-HTTP-Method-Override'] = type;
+          headers['x-http-method-override'] = type;
       }
 
       // When emulating JSON, we turn the body into a querystring.
@@ -79,12 +80,15 @@ module.exports = function (xhr) {
 
       // Combine generated headers with user's headers.
       if (ajaxConfig.headers) {
-          assign(headers, ajaxConfig.headers);
+          for (var key in ajaxConfig.headers) {
+              headers[key.toLowerCase()] = ajaxConfig.headers[key];
+          }
       }
+      
       params.headers = headers;
 
       //Set XDR for cross domain in IE8/9
-      if (ajaxConfig.useXDR) {
+      if (ajaxConfig.useXDR ) {
           params.useXDR = true;
       }
 
@@ -92,9 +96,7 @@ module.exports = function (xhr) {
       if (ajaxConfig.xhrFields) {
           var beforeSend = ajaxConfig.beforeSend;
           params.beforeSend = function (req) {
-              for (var key in ajaxConfig.xhrFields) {
-                  req[key] = ajaxConfig.xhrFields[key];
-              }
+              assign(req, ajaxConfig.xhrFields);
               if (beforeSend) return beforeSend.apply(this, arguments);
           };
           params.xhrFields = ajaxConfig.xhrFields;
@@ -116,8 +118,8 @@ module.exports = function (xhr) {
                   options.error(resp, 'error', message);
               }
           } else {
-              // Parse body as JSON if a string.
-              if (body && typeof body === 'string') {
+              // Parse body as JSON
+              if (typeof body === 'string' && (!headers.accept || headers.accept.indexOf('application/json')===0)) {
                   try {
                       body = JSON.parse(body);
                   } catch (err) {

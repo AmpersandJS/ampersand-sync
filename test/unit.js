@@ -16,7 +16,7 @@ test('should allow models to overwrite ajax configs at the model level', functio
                 withCredentials: true
             },
             headers: {
-                Accept: 'application/xml'
+                accept: 'application/xml'
             }
         }
     });
@@ -25,7 +25,7 @@ test('should allow models to overwrite ajax configs at the model level', functio
         t.equal(ajaxSettings.type, 'GET');
         t.equal(ajaxSettings.xhrFields.withCredentials, true);
         t.equal(ajaxSettings.useXDR, true);
-        t.equal(ajaxSettings.headers.Accept, 'application/xml');
+        t.equal(ajaxSettings.headers.accept, 'application/xml');
         t.equal(reqStub.recentOpts.method, 'GET');
         t.equal(reqStub.recentOpts.useXDR, true);
         t.ok(reqStub.recentOpts.beforeSend);
@@ -108,12 +108,6 @@ test('update', function (t) {
     t.end();
 });
 
-test('should default to Accept: application/json', function (t) {
-    var xhr = sync('read', modelStub());
-    t.equal(xhr.ajaxSettings.headers.Accept, 'application/json');
-    t.end();
-});
-
 test('update with emulateHTTP and emulateJSON', function (t) {
     var xhr = sync('update', modelStub({
         id: '2-the-tempest',
@@ -126,7 +120,7 @@ test('update with emulateHTTP and emulateJSON', function (t) {
     t.equal(reqStub.recentOpts.url, '/library');
     t.equal(reqStub.recentOpts.method, 'POST');
     t.equal(reqStub.recentOpts.body, 'model%5Bid%5D=2-the-tempest&model%5Bauthor%5D=Tim%20Shakespeare&model%5Blength%5D=123&_method=PUT');
-    t.equal(reqStub.recentOpts.headers['Content-Type'], 'application/x-www-form-urlencoded');
+    t.equal(reqStub.recentOpts.headers['content-type'], 'application/x-www-form-urlencoded');
     t.end();
 });
 
@@ -159,7 +153,7 @@ test('update with just emulateJSON', function (t) {
     });
     t.equal(reqStub.recentOpts.url, '/library');
     t.equal(reqStub.recentOpts.method, 'PUT');
-    t.equal(reqStub.recentOpts.headers['Content-Type'], 'application/x-www-form-urlencoded');
+    t.equal(reqStub.recentOpts.headers['content-type'], 'application/x-www-form-urlencoded');
     t.equal(reqStub.recentOpts.body, 'model%5Bid%5D=2-the-tempest&model%5Bauthor%5D=Tim%20Shakespeare&model%5Blength%5D=123');
     t.end();
 });
@@ -211,6 +205,7 @@ test('should call provided error callback on error.', function (t) {
     });
 });
 
+
 test('should call provided error callback on HTTP error.', function (t) {
     t.plan(1);
     var xhr = sync('read', modelStub(), {
@@ -226,13 +221,12 @@ test('should call provided error callback on HTTP error.', function (t) {
 });
 
 test('should call provided error callback for bad JSON.', function (t) {
-    t.plan(3);
+    t.plan(2);
 
     var xhr = sync('read', modelStub(), {
         error: function (resp, type, error) {
             t.deepEqual(resp, {}, 'should be passed through response');
             t.equal(type, 'error', 'is string \'error\' as per jquery');
-            t.ok(error == 'Unable to parse JSON string' || error == 'Unexpected end of input', 'should be json parse message');
             t.end();
         },
         xhrImplementation: function (ajaxSettings, callback) {
