@@ -21,14 +21,13 @@
     "lodash.defaults": "^3.1.0",
     "lodash.includes": "^3.1.0",
     "lodash.result": "^3.0.0",
-    "qs": "^2.2.4",
+    "qs": "^4.0.0",
     "request": "^2.55.0",
     "xhr": "^2.0.3"
   },
   "devDependencies": {
-    "ampersand-model": "^4.0.1",
-    "ampersand-rest-collection": "^2.0.1",
-    "browserify": "^6.2.0",
+    "ampersand-model": "^5.0.3",
+    "ampersand-rest-collection": "^4.0.0",
     "concat-stream": "^1.4.8",
     "jshint": "^2.5.3",
     "precommit-hook": "^1.0.7",
