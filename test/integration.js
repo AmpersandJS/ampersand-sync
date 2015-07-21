@@ -36,7 +36,7 @@ test('should get a response for read', function (t) {
     });
 });
 
-if (ImInBrowser && (typeof XDomainRequest !== 'undefined')) {
+if (ImInBrowser && (typeof XDomainRequest === 'undefined')) {
     test('should not parse body when not expecting JSON', function (t) {
         t.plan(1);
         var Me = Model.extend({
