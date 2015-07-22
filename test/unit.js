@@ -56,6 +56,7 @@ test('passing data', function (t) {
         }
     });
     t.equal(reqStub.recentOpts.url, '/library?a=a&one=1', 'data passed to reads should be made into a query string');
+    t.equal(typeof reqStub.recentOpts.data, 'undefined', 'data leftovers should be cleaned up');
 
     var modelStubInstance = modelStub();
     modelStubInstance.url = '/library?something=hi';
@@ -66,6 +67,7 @@ test('passing data', function (t) {
         }
     });
     t.equal(reqStub.recentOpts.url, '/library?something=hi&a=a&one=1', 'data passed to reads should be appended to an existing query string in the url');
+    t.equal(typeof reqStub.recentOpts.data, 'undefined', 'data leftovers should be cleaned up');
 
     sync('read', modelStub(), {
         url: '/library/books',
@@ -75,6 +77,7 @@ test('passing data', function (t) {
         }
     });
     t.equal(reqStub.recentOpts.url, '/library/books?a=a&one=1', 'data passed to reads should be added as a query string to overwritten url');
+    t.equal(typeof reqStub.recentOpts.data, 'undefined', 'data leftovers should be cleaned up');
     t.end();
 });
 
