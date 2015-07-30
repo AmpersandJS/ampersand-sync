@@ -39,16 +39,22 @@ module.exports = function (xhr) {
       
       
       var ajaxConfig = (result(model, 'ajaxConfig') || {});
-
+      var key;
       // Combine generated headers with user's headers.
       if (ajaxConfig.headers) {
-          for (var key in ajaxConfig.headers) {
+          for (key in ajaxConfig.headers) {
               headers[key.toLowerCase()] = ajaxConfig.headers[key];
           }
       }
-      ajaxConfig.headers=headers;
+      if (options.headers) {
+          for (key in options.headers) {
+              headers[key.toLowerCase()] = options.headers[key];
+          }
+          delete options.headers;
+      }
       //ajaxConfig has to be merged into params before other options take effect, so it is in fact a 2lvl default
       assign(params, ajaxConfig);
+      params.headers = headers;
 
       // Ensure that we have a URL.
       if (!options.url) {

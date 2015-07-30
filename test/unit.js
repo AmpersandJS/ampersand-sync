@@ -34,6 +34,32 @@ test('should allow models to overwrite ajax configs at the model level', functio
     var xhr = sync('read', m);
 });
 
+test('should merge headers and lowercase them', function (t) {
+    t.plan(3);
+    var Me = Model.extend({
+        url: '/hi',
+        ajaxConfig: {
+            headers: {
+                ACcept: 'application/xml',
+                "X-Other-Header": "ok"
+            }
+        }
+    });
+    var m = new Me();
+    m.on('request', function (model, xhr, options, ajaxSettings) {
+        t.equal(reqStub.recentOpts.headers.accept, '*/*');
+        t.equal(reqStub.recentOpts.headers["x-other-header"], 'ok');
+        t.equal(reqStub.recentOpts.headers["x-another-header"], 'ok');
+        t.end();
+    });
+    var xhr = sync('read', m, {
+        headers: {
+            accEPT: '*/*',
+            "X-anOther-Header": "ok"
+        }
+    });
+});
+
 test('read', function (t) {
     sync('read', modelStub());
     t.equal(reqStub.recentOpts.url, '/library');
