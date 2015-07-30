@@ -134,7 +134,7 @@ module.exports = function (xhr) {
           }
           if (options.always) options.always(err, resp, body);
       });
-      model.trigger('request', model, request, options, ajaxSettings);
+      if (model) model.trigger('request', model, request, options, ajaxSettings);
       request.ajaxSettings = ajaxSettings;
       return request;
   };
