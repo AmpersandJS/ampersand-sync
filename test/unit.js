@@ -249,6 +249,21 @@ test('should call provided error callback on HTTP error.', function (t) {
     });
 });
 
+
+test('should parse JSON in error responses if possible', function (t) {
+    t.plan(1);
+    var xhr = sync('read', modelStub(), {
+        error: function (resp,type,error) {
+            t.equal(error.e,"rror");
+            t.end();
+        },
+        xhrImplementation: function (ajaxSettings, callback) {
+            callback(null, {statusCode:400}, '{"e":"rror"}');
+            return {};
+        }
+    });
+});
+
 test('should call provided error callback for bad JSON.', function (t) {
     t.plan(2);
 
