@@ -36,6 +36,25 @@ module.exports = function (xhr) {
 
       // Default request options.
       var params = {type: type};
+      
+      
+      var ajaxConfig = (result(model, 'ajaxConfig') || {});
+      var key;
+      // Combine generated headers with user's headers.
+      if (ajaxConfig.headers) {
+          for (key in ajaxConfig.headers) {
+              headers[key.toLowerCase()] = ajaxConfig.headers[key];
+          }
+      }
+      if (options.headers) {
+          for (key in options.headers) {
+              headers[key.toLowerCase()] = options.headers[key];
+          }
+          delete options.headers;
+      }
+      //ajaxConfig has to be merged into params before other options take effect, so it is in fact a 2lvl default
+      assign(params, ajaxConfig);
+      params.headers = headers;
 
       // Ensure that we have a URL.
       if (!options.url) {
@@ -58,7 +77,7 @@ module.exports = function (xhr) {
 
       // For older servers, emulate JSON by encoding the request into an HTML-form.
       if (options.emulateJSON) {
-          headers['content-type'] = 'application/x-www-form-urlencoded';
+          params.headers['content-type'] = 'application/x-www-form-urlencoded';
           params.body = params.json ? {model: params.json} : {};
           delete params.json;
       }
@@ -68,7 +87,7 @@ module.exports = function (xhr) {
       if (options.emulateHTTP && (type === 'PUT' || type === 'DELETE' || type === 'PATCH')) {
           params.type = 'POST';
           if (options.emulateJSON) params.body._method = type;
-          headers['x-http-method-override'] = type;
+          params.headers['x-http-method-override'] = type;
       }
 
       // When emulating JSON, we turn the body into a querystring.
@@ -77,24 +96,7 @@ module.exports = function (xhr) {
           params.body = qs.stringify(params.body);
       }
 
-      // Start setting ajaxConfig options (headers, xhrFields).
-      var ajaxConfig = (result(model, 'ajaxConfig') || {});
-
-      // Combine generated headers with user's headers.
-      if (ajaxConfig.headers) {
-          for (var key in ajaxConfig.headers) {
-              headers[key.toLowerCase()] = ajaxConfig.headers[key];
-          }
-      }
-      
-      params.headers = headers;
-
-      //Set XDR for cross domain in IE8/9
-      if (ajaxConfig.useXDR ) {
-          params.useXDR = true;
-      }
-
-      // Set raw xhr options.
+      // Set raw XMLHttpRequest options.
       if (ajaxConfig.xhrFields) {
           var beforeSend = ajaxConfig.beforeSend;
           params.beforeSend = function (req) {
@@ -102,9 +104,7 @@ module.exports = function (xhr) {
               if (beforeSend) return beforeSend.apply(this, arguments);
           };
           params.xhrFields = ajaxConfig.xhrFields;
-      } else {
-          params.beforeSend = ajaxConfig.beforeSend;
-      }
+      } 
 
       // Turn a jQuery.ajax formatted request into xhr compatible
       params.method = params.type;
@@ -121,7 +121,7 @@ module.exports = function (xhr) {
               }
           } else {
               // Parse body as JSON
-              if (typeof body === 'string' && (!headers.accept || headers.accept.indexOf('application/json')===0)) {
+              if (typeof body === 'string' && (!params.headers.accept || params.headers.accept.indexOf('application/json')===0)) {
                   try {
                       body = JSON.parse(body);
                   } catch (err) {
