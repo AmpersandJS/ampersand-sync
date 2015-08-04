@@ -119,6 +119,9 @@ module.exports = function (xhr) {
       var request = options.xhr = options.xhrImplementation(ajaxSettings, function (err, resp, body) {
           if (err || resp.statusCode >= 400) {
               if (options.error) {
+                  try {
+                      body = JSON.parse(body);
+                  } catch(e){}
                   var message = (err? err.message : (body || "HTTP"+resp.statusCode));
                   options.error(resp, 'error', message);
               }
