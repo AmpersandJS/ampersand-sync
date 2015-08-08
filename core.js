@@ -140,7 +140,7 @@ module.exports = function (xhr) {
           }
           if (options.always) options.always(err, resp, body);
       });
-      if (model) model.trigger('request', model, request, options, ajaxSettings);
+      if (model) model.trigger('request', model, request, optionsInput, ajaxSettings);
       request.ajaxSettings = ajaxSettings;
       return request;
   };
