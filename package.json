@@ -30,7 +30,7 @@
     "ampersand-rest-collection": "^4.0.0",
     "concat-stream": "^1.4.8",
     "jshint": "^2.5.3",
-    "precommit-hook": "^1.0.7",
+    "precommit-hook": "^3.0.0",
     "run-browser": "^2.0.2",
     "tap-spec": "^4.0.2",
     "tape": "^4.0.0"
@@ -51,7 +51,9 @@
   },
   "scripts": {
     "start": "run-browser test/index.js",
-    "test": "run-browser test/index.js -b | tap-spec && node test/index.js"
+    "test": "run-browser test/index.js -b | tap-spec && node test/index.js",
+    "lint": "jshint .",
+    "validate": "npm ls"
   },
   "testling": {
     "files": "test/*.js",
@@ -68,5 +70,10 @@
       "iphone/6.0..latest",
       "android-browser/4.2..latest"
     ]
-  }
+  },
+  "pre-commit": [
+    "lint",
+    "validate",
+    "test"
+  ]
 }
