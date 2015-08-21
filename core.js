@@ -116,7 +116,7 @@ module.exports = function (xhr) {
 
       // Make the request. The callback executes functions that are compatible
       // With jQuery.ajax's syntax.
-      var request = options.xhr = options.xhrImplementation(ajaxSettings, function (err, resp, body) {
+      var request = options.xhrImplementation(ajaxSettings, function (err, resp, body) {
           if (err || resp.statusCode >= 400) {
               if (options.error) {
                   try {
