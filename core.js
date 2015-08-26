@@ -4,6 +4,7 @@ var defaults = require('lodash.defaults');
 var includes = require('lodash.includes');
 var assign = require('lodash.assign');
 var qs = require('qs');
+var mediaType = require('media-type');
 
 
 module.exports = function (xhr) {
@@ -127,7 +128,9 @@ module.exports = function (xhr) {
               }
           } else {
               // Parse body as JSON
-              if (typeof body === 'string' && (!params.headers.accept || params.headers.accept.indexOf('application/json')===0)) {
+              var accept = mediaType.fromString(params.headers.accept);
+              var parseJson = accept.isValid() && accept.type === 'application' && (accept.subtype === 'json' || accept.suffix === 'json');
+              if (typeof body === 'string' && (!params.headers.accept || parseJson)) {
                   try {
                       body = JSON.parse(body);
                   } catch (err) {

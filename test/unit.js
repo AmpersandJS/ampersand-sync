@@ -326,3 +326,29 @@ test('Call "always" after error callback', function (t) {
     });
 });
 
+test('should parse json for different media types', function (t) {
+    t.plan(4);
+
+    var jsonMediaTypes = [
+        '', // Test with no accept header
+        'application/hal+json',
+        'application/json+hal',
+        'application/json'
+    ];
+
+    jsonMediaTypes.forEach(function (mediaType) {
+        sync('read', modelStub(), {
+            headers: {
+                accept: 'application/hal+json'
+            },
+            success: function (resp, type, error) {
+                t.deepEqual(resp.good, 'json', (mediaType || 'no type') + ' is parsed as json');
+            },
+            xhrImplementation: function (ajaxSettings, callback) {
+                callback(null, {}, '{"good": "json"}');
+                return {};
+            }
+        });
+    });
+});
+
