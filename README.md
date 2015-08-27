@@ -112,7 +112,7 @@ This should only affect your if you're using `ajaxConfig` as a function. If so y
 
 All credit goes to Jeremy Ashkenas and the other Backbone.js authors.
 
-The ampersand-sync you are using today was made available to you by all the contributors listed here: https://github.com/AmpersandJS/ampersand-sync/graphs/contributors
+The `ampersand-sync` you are using today was made available to you by all the contributors listed here: https://github.com/AmpersandJS/ampersand-sync/graphs/contributors
 
 
 ## license
