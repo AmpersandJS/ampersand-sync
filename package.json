@@ -31,10 +31,10 @@
     "ampersand-rest-collection": "^4.0.0",
     "concat-stream": "^1.4.8",
     "jshint": "^2.5.3",
+    "phantomjs": "^1.9.19",
     "precommit-hook": "^3.0.0",
-    "run-browser": "^2.0.2",
-    "tap-spec": "^4.0.2",
-    "tape": "^4.0.0"
+    "tape": "^4.0.0",
+    "zuul": "^3.9.0"
   },
   "homepage": "https://github.com/ampersandjs/ampersand-sync",
   "keywords": [
@@ -51,26 +51,11 @@
     "url": "https://github.com/ampersandjs/ampersand-sync.git"
   },
   "scripts": {
-    "start": "run-browser test/index.js",
-    "test": "run-browser test/index.js -b | tap-spec && node test/index.js",
+    "start": "zuul --local -- test/index.js",
+    "test": "zuul --phantom -- test/index.js",
+    "test-ci": "zuul -- test/index.js",
     "lint": "jshint .",
     "validate": "npm ls"
-  },
-  "testling": {
-    "files": "test/*.js",
-    "browsers": [
-      "ie/8..latest",
-      "firefox/17..latest",
-      "firefox/nightly",
-      "chrome/22..latest",
-      "chrome/canary",
-      "opera/12..latest",
-      "opera/next",
-      "safari/5.1..latest",
-      "ipad/6.0..latest",
-      "iphone/6.0..latest",
-      "android-browser/4.2..latest"
-    ]
   },
   "pre-commit": [
     "lint",
