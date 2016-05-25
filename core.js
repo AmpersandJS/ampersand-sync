@@ -1,8 +1,8 @@
 /*$AMPERSAND_VERSION*/
-var result = require('lodash.result');
-var defaults = require('lodash.defaults');
-var includes = require('lodash.includes');
-var assign = require('lodash.assign');
+var result = require('lodash/result');
+var defaults = require('lodash/defaults');
+var includes = require('lodash/includes');
+var assign = require('lodash/assign');
 var qs = require('qs');
 var mediaType = require('media-type');
 
