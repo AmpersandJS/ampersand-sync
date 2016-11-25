@@ -83,7 +83,7 @@ module.exports = function (xhr) {
       // For older servers, emulate JSON by encoding the request into an HTML-form.
       if (options.emulateJSON) {
           params.headers['content-type'] = 'application/x-www-form-urlencoded';
-          params.body = params.json ? {model: params.body || params.json} : {};
+          params.body = params.json ? {model: params.body} : {};
           delete params.json;
       }
 
