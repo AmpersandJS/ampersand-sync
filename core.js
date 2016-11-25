@@ -41,8 +41,7 @@ module.exports = function (xhr) {
       // Default request options.
       var params = {type: type};
 
-
-      var ajaxConfig = (result(model, 'ajaxConfig') || {});
+      var ajaxConfig = result(model, 'ajaxConfig', {});
       var key;
       // Combine generated headers with user's headers.
       if (ajaxConfig.headers) {
