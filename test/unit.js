@@ -352,3 +352,21 @@ test('should parse json for different media types', function (t) {
     });
 });
 
+test('passing `body` in the opts should take precedence over the model\'s data', function (t) {
+	var model = modelStub({
+        title: 'The Tempest',
+        author: 'Bill Shakespeare',
+        length: 123
+    });
+
+    sync('create', model, {
+	    body: {
+		    rating: "5"
+	    }
+    });
+
+    t.equal(reqStub.recentOpts.json, true, 'json is set to true');
+    var data = reqStub.recentOpts.body;
+    t.equal(data.rating, '5');
+    t.end();
+});
