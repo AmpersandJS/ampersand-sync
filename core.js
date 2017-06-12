@@ -129,7 +129,7 @@ module.exports = function (xhr) {
               // Parse body as JSON
               var accept = mediaType.fromString(params.headers.accept);
               var parseJson = accept.isValid() && accept.type === 'application' && (accept.subtype === 'json' || accept.suffix === 'json');
-              if (typeof body === 'string' && (!params.headers.accept || parseJson)) {
+              if (typeof body === 'string' && body !== '' && (!params.headers.accept || parseJson)) {
                   try {
                       body = JSON.parse(body);
                   } catch (err) {
