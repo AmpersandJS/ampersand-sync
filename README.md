@@ -66,6 +66,7 @@ Additional fields in `options`:
  - emulateJSON - defaults to `false`
  - xhrImplementation - can be used to override http request implementation for just this one call
  - data - JSON serializable object to be sent as request body
+ - qsOptions - set stringify encoding options and create a different URI output if needed [[see qs.stringify(string,[options])]](https://www.npmjs.com/package/qs/v/4.0.0#stringifying)
  - `success(body, 'success', responseObject)` - optional callback to be called when request finishes successfully
  - `error(responseObject, 'error', error.message)` - optional callback to be called when an error occurs (http request/response error or parsing response error)
  - `always(error, responseObject, body)` - optional callback to be called when request finishes no matter what the result

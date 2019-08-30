@@ -99,10 +99,25 @@ test('passing data', function (t) {
         url: '/library/books',
         data: {
             a: 'a',
-            one: 1
+            one: 1,
+            status: ["one", "two"]
         }
     });
-    t.equal(reqStub.recentOpts.url, '/library/books?a=a&one=1', 'data passed to reads should be added as a query string to overwritten url');
+    t.equal(reqStub.recentOpts.url, '/library/books?a=a&one=1&status%5B0%5D=one&status%5B1%5D=two', 'data passed to reads should be added as a query string to overwritten url');
+    t.equal(typeof reqStub.recentOpts.data, 'undefined', 'data leftovers should be cleaned up');
+
+    sync('read', modelStub(), {
+        url: '/library/books',
+        data: {
+            a: 'a',
+            one: 1,
+            status: ["one", "two"]
+        },
+        qsOptions: {
+            indices: false
+        }
+    });
+    t.equal(reqStub.recentOpts.url, '/library/books?a=a&one=1&status=one&status=two', 'data passed to reads should be added as a query string to overwritten url with qsOptions overwriting qs.stringify default behavior');
     t.equal(typeof reqStub.recentOpts.data, 'undefined', 'data leftovers should be cleaned up');
     t.end();
 });
