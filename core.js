@@ -73,14 +73,10 @@ module.exports = function (xhr) {
       if (options.data && type === 'GET') {
           // make sure we've got a '?'
           options.url += includes(options.url, '?') ? '&' : '?';
-          // set stringify encoding options and create a different URI output if needed
+          // set stringify encoding options and create a different URI output if qsOption is defined
           // ex) qsOptions = { indices: false }
           // https://www.npmjs.com/package/qs/v/4.0.0#stringifying
-          if(options.qsOptions){
-            options.url += qs.stringify(options.data, options.qsOptions);
-          }else{
-            options.url += qs.stringify(options.data);
-          }
+          options.url += qs.stringify(options.data, options.qsOptions);
           
           //delete `data` so `xhr` doesn't use it as a body
           delete options.data;
