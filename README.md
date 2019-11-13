@@ -31,7 +31,7 @@ var sync = require("ampersand-sync")
 var rawRequest = sync(method, model, options)
 ```
 
-**method** is a string used for choosing HTTP verb of the sync request. It has to be chosen from the keys of the following map:
+**method** is a string used for choosing HTTP verb of the sync request. You can either provide the HTTP method you want to use directly (GET, POST, etc) or specify a RESTful operation which will apply the following convention (used by `ampersand-model`):
 ```js
 {
       'create': 'POST',
