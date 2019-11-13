@@ -66,7 +66,8 @@ module.exports = function (xhr) {
 
       // Ensure that we have the appropriate request data.
       if (options.data == null && model && (method === 'create' || method === 'update' || method === 'patch')) {
-          params.json = options.attrs || model.toJSON(options);
+          params.body = options.attrs || model.toJSON(options);
+          params.json = true;
       }
 
       // If passed a data param, we add it to the URL or body depending on request type
@@ -85,7 +86,7 @@ module.exports = function (xhr) {
       // For older servers, emulate JSON by encoding the request into an HTML-form.
       if (options.emulateJSON) {
           params.headers['content-type'] = 'application/x-www-form-urlencoded';
-          params.body = params.json ? {model: params.json} : {};
+          params.body = params.json ? {model: params.body} : {};
           delete params.json;
       }
 

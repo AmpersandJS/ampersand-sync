@@ -130,8 +130,8 @@ test('create', function (t) {
     }));
     t.equal(reqStub.recentOpts.url, '/library');
     t.equal(reqStub.recentOpts.method, 'POST');
-    t.ok(reqStub.recentOpts.json, 'body passed as json');
-    var data = reqStub.recentOpts.json;
+    t.equal(reqStub.recentOpts.json, true, 'json is set to true');
+    var data = reqStub.recentOpts.body;
     t.equal(data.title, 'The Tempest');
     t.equal(data.author, 'Bill Shakespeare');
     t.equal(data.length, 123);
@@ -145,8 +145,8 @@ test('update', function (t) {
     }));
     t.equal(reqStub.recentOpts.url, '/library');
     t.equal(reqStub.recentOpts.method, 'PUT');
-    t.ok(reqStub.recentOpts.json, 'body passed as json');
-    var data = reqStub.recentOpts.json;
+    t.equal(reqStub.recentOpts.json, true, 'json is set to true');
+    var data = reqStub.recentOpts.body;
     t.equal(data.id, '1-the-tempest');
     t.equal(data.author, 'William Shakespeare');
     t.end();
@@ -178,8 +178,8 @@ test('update with just emulateHTTP', function (t) {
     });
     t.equal(reqStub.recentOpts.url, '/library');
     t.equal(reqStub.recentOpts.method, 'POST');
-    t.ok(reqStub.recentOpts.json, 'body passed as json');
-    var data = reqStub.recentOpts.json;
+    t.equal(reqStub.recentOpts.json, true, 'json is set to true');
+    var data = reqStub.recentOpts.body;
     t.equal(data.id, '2-the-tempest');
     t.equal(data.author, 'Tim Shakespeare');
     t.equal(data.length, 123);
@@ -367,3 +367,21 @@ test('should parse json for different media types', function (t) {
     });
 });
 
+test('passing `body` in the opts should take precedence over the model\'s data', function (t) {
+	var model = modelStub({
+        title: 'The Tempest',
+        author: 'Bill Shakespeare',
+        length: 123
+    });
+
+    sync('create', model, {
+	    body: {
+		    rating: "5"
+	    }
+    });
+
+    t.equal(reqStub.recentOpts.json, true, 'json is set to true');
+    var data = reqStub.recentOpts.body;
+    t.equal(data.rating, '5');
+    t.end();
+});
